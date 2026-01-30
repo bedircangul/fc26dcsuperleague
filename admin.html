@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - EA FC 26</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0a2351 0%, #1a4b8c 50%, #0a2351 100%);
       min-height: 100vh;
       padding: 20px;
     }
@@ -20,14 +21,20 @@
     .login-box {
       background: white;
       padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       max-width: 400px;
       margin: 100px auto;
       text-align: center;
     }
     
-    .login-box h2 { margin-bottom: 25px; color: #333; }
+    .login-box h2 { 
+      margin-bottom: 25px; 
+      color: #0a2351;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 2px;
+    }
     
     .login-box input {
       width: 100%;
@@ -41,69 +48,76 @@
     .login-box button {
       width: 100%;
       padding: 15px;
-      background: #f5576c;
+      background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%);
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
     }
     
-    .error { color: #f5576c; margin-top: 10px; }
+    .error { color: #dc3545; margin-top: 10px; }
     .hidden { display: none; }
     
     .header {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
+      background: rgba(255,255,255,0.95);
+      padding: 20px 30px;
+      border-radius: 15px;
       margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     
     h1 {
-      color: #333;
-      font-size: 28px;
+      color: #0a2351;
+      font-size: 36px;
       margin: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 2px;
     }
     
     .tabs {
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
-      background: white;
-      padding: 10px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.08);
+      padding: 12px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
     }
     
     .tab-btn {
       flex: 1;
-      padding: 15px;
-      background: #e9ecef;
+      padding: 18px;
+      background: rgba(255,255,255,0.05);
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.3s;
-      color: #495057;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
     }
     
     .tab-btn.active {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%);
       color: white;
+      box-shadow: 0 4px 15px rgba(26, 75, 140, 0.6);
     }
     
     .tab-content {
       display: none;
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
     
     .tab-content.active { display: block; }
@@ -113,93 +127,121 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 14px;
       transition: all 0.3s;
+      font-family: 'Roboto', sans-serif;
     }
     
     .btn:hover { opacity: 0.9; transform: translateY(-2px); }
     
     .btn-logout { background: #dc3545; color: white; }
-    .btn-primary { background: #28a745; color: white; }
+    .btn-primary { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3); }
     .btn-secondary { background: #6c757d; color: white; }
     .btn-warning { background: #ffc107; color: #333; }
     .btn-danger { background: #dc3545; color: white; }
     .btn-info { background: #17a2b8; color: white; }
+    .btn-add { background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%); color: white; box-shadow: 0 4px 12px rgba(26, 75, 140, 0.4); }
     
     .section {
-      margin-bottom: 30px;
+      margin-bottom: 35px;
     }
     
     .section h3 {
-      color: #333;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #f0f0f0;
+      color: #0a2351;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #1a4b8c;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 1px;
     }
     
     .draw-item {
       background: #f8f9fa;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      display: flex;
-      gap: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border-left: 5px solid #1a4b8c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .draw-item-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 1fr 100px;
+      gap: 15px;
       align-items: center;
-      border-left: 4px solid #f5576c;
+      margin-bottom: 10px;
     }
     
     .draw-item label {
-      flex: 0 0 120px;
-      font-weight: 600;
-      color: #333;
+      font-weight: 700;
+      color: #0a2351;
     }
     
-    .draw-item select {
-      flex: 1;
-      padding: 10px;
-      border: 2px solid #ddd;
+    .draw-item input, .draw-item select {
+      padding: 12px;
+      border: 2px solid #dee2e6;
       border-radius: 6px;
       font-size: 14px;
       background: white;
     }
     
+    .logo-input {
+      grid-column: 2 / 4;
+    }
+    
+    .logo-preview {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      padding: 5px;
+      background: white;
+    }
+    
     .match-item {
       background: #f8f9fa;
-      padding: 20px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border-left: 4px solid #f5576c;
+      padding: 25px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border-left: 5px solid #1a4b8c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     .match-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     
     .match-title {
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0a2351;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
     }
     
     .match-week {
-      background: #667eea;
+      background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%);
       color: white;
-      padding: 5px 12px;
-      border-radius: 5px;
-      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
     }
     
     .match-controls {
       display: grid;
-      grid-template-columns: 2fr 120px 80px 200px;
-      gap: 10px;
+      grid-template-columns: 2fr 140px 100px 180px;
+      gap: 15px;
       align-items: center;
     }
     
@@ -211,39 +253,42 @@
     
     .match-teams select {
       flex: 1;
-      padding: 10px;
-      border: 2px solid #ddd;
+      padding: 12px;
+      border: 2px solid #dee2e6;
       border-radius: 6px;
       font-size: 14px;
+      background: white;
     }
     
     .match-score {
       display: flex;
-      gap: 5px;
+      gap: 8px;
       align-items: center;
     }
     
     .match-score input {
-      width: 50px;
-      padding: 10px 5px;
+      width: 55px;
+      padding: 12px 8px;
       text-align: center;
-      border: 2px solid #ddd;
+      border: 2px solid #dee2e6;
       border-radius: 6px;
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
     }
     
     .match-week-input {
-      padding: 10px;
-      border: 2px solid #ddd;
+      padding: 12px;
+      border: 2px solid #dee2e6;
       border-radius: 6px;
       font-size: 14px;
       text-align: center;
+      font-weight: 700;
     }
     
     .match-actions {
       display: flex;
-      gap: 5px;
+      gap: 8px;
     }
     
     .success-msg {
@@ -251,50 +296,29 @@
       color: #155724;
       padding: 12px;
       border-radius: 6px;
-      margin-top: 10px;
+      margin-top: 15px;
       display: none;
+      font-weight: 600;
     }
     
-    /* Preview styles */
     .preview-box {
       background: #f8f9fa;
-      padding: 20px;
-      border-radius: 8px;
+      padding: 25px;
+      border-radius: 10px;
       margin-top: 20px;
-      border: 2px solid #667eea;
+      border: 2px solid #1a4b8c;
     }
     
     .preview-box h4 {
-      color: #667eea;
+      color: #1a4b8c;
       margin-bottom: 15px;
-    }
-    
-    .preview-draw-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .preview-draw-card {
-      background: white;
-      padding: 12px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .preview-match {
-      background: white;
-      padding: 12px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1px;
     }
     
     @media (max-width: 768px) {
-      .match-controls {
+      .match-controls, .draw-item-row {
         grid-template-columns: 1fr;
       }
       .tabs {
@@ -324,45 +348,43 @@
         <button class="tab-btn" data-tab="preview">👁️ Önizleme</button>
       </div>
 
-      <!-- KURA TAB -->
       <div id="draw-content" class="tab-content active">
         <div class="section">
           <h3>
-            <span>Takım Eşleşmeleri</span>
+            <span>Takım & Oyuncu Yönetimi</span>
+            <button class="btn btn-add" onclick="addDrawEntry()">➕ Yeni Ekle</button>
           </h3>
-          <p style="color: #666; margin-bottom: 15px;">
-            Her oyuncu için istediğiniz takımı seçin. Aynı takımı birden fazla oyuncuya atayabilirsiniz.
+          <p style="color: #666; margin-bottom: 20px;">
+            Oyuncu adı, takım adı ve takım logosu URL'sini girin. Logo URL'si için: takım logosuna sağ tık → "Resim Adresini Kopyala"
           </p>
           <div id="draw-list"></div>
-          <button class="btn btn-primary" onclick="saveDraw()" style="margin-top: 15px;">
+          <button class="btn btn-primary" onclick="saveDraw()" style="margin-top: 20px; font-size: 16px; padding: 15px 30px;">
             💾 Tüm Değişiklikleri Kaydet
           </button>
           <div id="draw-msg" class="success-msg"></div>
         </div>
       </div>
 
-      <!-- FIKSTÜR TAB -->
       <div id="fixtures-content" class="tab-content">
         <div class="section">
           <h3>
             <span>Maçlar</span>
-            <button class="btn btn-primary" onclick="addNewMatch()">➕ Yeni Maç Ekle</button>
+            <button class="btn btn-add" onclick="addNewMatch()">➕ Yeni Maç Ekle</button>
           </h3>
           <div id="matches-list"></div>
         </div>
       </div>
 
-      <!-- ÖNİZLEME TAB -->
       <div id="preview-content" class="tab-content">
         <div class="section">
           <h3>👁️ Kullanıcıların Gördüğü Sayfa</h3>
-          <p style="color: #666; margin-bottom: 15px;">
+          <p style="color: #666; margin-bottom: 20px;">
             Bu, kullanıcıların public sayfada gördüğü içerik. Değişiklikler otomatik yansır.
           </p>
           
           <div class="preview-box">
             <h4>🎲 Kura</h4>
-            <div id="preview-draw" class="preview-draw-grid">
+            <div id="preview-draw" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
               <div style="text-align: center; color: #999;">Yükleniyor...</div>
             </div>
           </div>
@@ -370,13 +392,6 @@
           <div class="preview-box">
             <h4>📋 Fikstür (Son 10 Maç)</h4>
             <div id="preview-fixtures">
-              <div style="text-align: center; color: #999;">Yükleniyor...</div>
-            </div>
-          </div>
-          
-          <div class="preview-box">
-            <h4>🏆 Puan Durumu</h4>
-            <div id="preview-standings" style="overflow-x: auto;">
               <div style="text-align: center; color: #999;">Yükleniyor...</div>
             </div>
           </div>
@@ -391,8 +406,7 @@
     const ADMIN_PASSWORD = 'TurnuvaBedircan2024!'
 
     let adminSupabase = null
-    const players = ['Bedircan', 'Deniz', 'Emre', 'Fatih', 'Gür', 'İlker', 'Kürşat', 'Levent', 'Erhan', 'Furkan']
-    const allTeams = ['Arsenal', 'Liverpool', 'PSG', 'Barcelona', 'Real Madrid', 'Manchester City', 'Bayern Munich', 'Inter', 'Atletico Madrid', 'Chelsea', 'Tottenham', 'Manchester United', 'AC Milan', 'Juventus', 'Borussia Dortmund']
+    let drawEntries = []
 
     function login() {
       const password = document.getElementById('admin-password').value
@@ -418,7 +432,6 @@
       loadPreview()
     }
 
-    // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const targetTab = this.getAttribute('data-tab')
@@ -436,50 +449,91 @@
     })
 
     async function loadDrawData() {
-      const { data } = await adminSupabase.from('draw').select('*')
-      const existing = data || []
+      const { data } = await adminSupabase.from('draw').select('*').order('player_name')
+      drawEntries = data || []
       
-      const html = players.map(player => {
-        const current = existing.find(e => e.player_name === player)
-        const currentTeam = current ? current.team_name : ''
-        
-        return `
-          <div class="draw-item">
-            <label>${player}</label>
-            <select id="team-${player}">
-              <option value="">-- Takım Seç --</option>
-              ${allTeams.map(team => `
-                <option value="${team}" ${team === currentTeam ? 'selected' : ''}>${team}</option>
-              `).join('')}
-            </select>
+      if (drawEntries.length === 0) {
+        drawEntries = [{ player_name: '', team_name: '', team_logo: '' }]
+      }
+      
+      renderDraw()
+    }
+
+    function addDrawEntry() {
+      drawEntries.push({ player_name: '', team_name: '', team_logo: '' })
+      renderDraw()
+    }
+
+    function removeDrawEntry(index) {
+      if (confirm('Bu girişi silmek istediğinizden emin misiniz?')) {
+        drawEntries.splice(index, 1)
+        renderDraw()
+      }
+    }
+
+    function renderDraw() {
+      const html = drawEntries.map((entry, index) => `
+        <div class="draw-item">
+          <div class="draw-item-row">
+            <label>Oyuncu</label>
+            <input type="text" id="player-${index}" value="${entry.player_name || ''}" placeholder="Oyuncu adı">
+            <input type="text" id="team-${index}" value="${entry.team_name || ''}" placeholder="Takım adı">
+            <button class="btn btn-danger" onclick="removeDrawEntry(${index})">🗑️</button>
           </div>
-        `
-      }).join('')
+          <div class="draw-item-row">
+            <label>Logo URL</label>
+            <input type="text" id="logo-${index}" class="logo-input" value="${entry.team_logo || ''}" 
+                   placeholder="https://example.com/logo.png" onchange="updateLogoPreview(${index})">
+            <img id="logo-preview-${index}" src="${entry.team_logo || ''}" class="logo-preview" 
+                 onerror="this.style.display='none'" style="${entry.team_logo ? '' : 'display:none'}">
+          </div>
+        </div>
+      `).join('')
       
       document.getElementById('draw-list').innerHTML = html
+    }
+
+    function updateLogoPreview(index) {
+      const logoUrl = document.getElementById(`logo-${index}`).value
+      const preview = document.getElementById(`logo-preview-${index}`)
+      if (logoUrl) {
+        preview.src = logoUrl
+        preview.style.display = 'block'
+      } else {
+        preview.style.display = 'none'
+      }
     }
 
     async function saveDraw() {
       const updates = []
       
-      for (const player of players) {
-        const teamSelect = document.getElementById(`team-${player}`)
-        const teamName = teamSelect.value
+      for (let i = 0; i < drawEntries.length; i++) {
+        const playerName = document.getElementById(`player-${i}`).value.trim()
+        const teamName = document.getElementById(`team-${i}`).value.trim()
+        const logoUrl = document.getElementById(`logo-${i}`).value.trim()
         
-        if (teamName) {
-          updates.push({ player_name: player, team_name: teamName })
+        if (playerName && teamName) {
+          updates.push({
+            player_name: playerName,
+            team_name: teamName,
+            team_logo: logoUrl || null
+          })
         }
+      }
+      
+      if (updates.length === 0) {
+        alert('Lütfen en az bir oyuncu ve takım girin!')
+        return
       }
       
       try {
         await adminSupabase.from('draw').delete().neq('id', 0)
         
-        if (updates.length > 0) {
-          const { error } = await adminSupabase.from('draw').insert(updates)
-          if (error) throw error
-        }
+        const { error } = await adminSupabase.from('draw').insert(updates)
+        if (error) throw error
         
-        showDrawMessage('✅ Kura başarıyla kaydedildi!')
+        showDrawMessage('✅ Tüm değişiklikler kaydedildi!')
+        await loadDrawData()
         setTimeout(loadPreview, 1000)
       } catch (error) {
         console.error('Kayıt hatası:', error)
@@ -498,7 +552,7 @@
       const { data } = await adminSupabase.from('matches').select('*').order('week_number, id')
       const { data: drawData } = await adminSupabase.from('draw').select('*')
       
-      const teamList = drawData && drawData.length > 0 ? drawData.map(d => d.team_name) : allTeams.slice(0, 10)
+      const teamList = drawData && drawData.length > 0 ? drawData.map(d => d.team_name) : []
       
       const html = (data || []).map(match => `
         <div class="match-item" id="match-${match.id}">
@@ -514,7 +568,7 @@
                   <option value="${team}" ${team === match.home_team ? 'selected' : ''}>${team}</option>
                 `).join('')}
               </select>
-              <span style="font-weight: bold;">vs</span>
+              <span style="font-weight: bold; color: #1a4b8c;">VS</span>
               <select id="away-team-${match.id}">
                 ${teamList.map(team => `
                   <option value="${team}" ${team === match.away_team ? 'selected' : ''}>${team}</option>
@@ -526,7 +580,7 @@
               <input type="number" id="home-score-${match.id}" 
                      value="${match.home_score !== null ? match.home_score : ''}" 
                      placeholder="0" min="0" max="99">
-              <span>-</span>
+              <span style="font-weight: bold;">-</span>
               <input type="number" id="away-score-${match.id}" 
                      value="${match.away_score !== null ? match.away_score : ''}" 
                      placeholder="0" min="0" max="99">
@@ -551,10 +605,10 @@
 
     async function addNewMatch() {
       const { data: drawData } = await adminSupabase.from('draw').select('*')
-      const teamList = drawData && drawData.length >= 2 ? drawData.map(d => d.team_name) : allTeams.slice(0, 2)
+      const teamList = drawData && drawData.length >= 2 ? drawData.map(d => d.team_name) : []
       
       if (teamList.length < 2) {
-        alert('Lütfen önce en az 2 takım atayın!')
+        alert('Lütfen önce en az 2 takım ekleyin!')
         return
       }
       
@@ -568,7 +622,6 @@
         if (error) throw error
         await loadMatches()
       } catch (error) {
-        console.error('Maç ekleme hatası:', error)
         alert('Hata: ' + error.message)
       }
     }
@@ -636,9 +689,8 @@
       setTimeout(() => msg.style.display = 'none', 3000)
     }
 
-    // PREVIEW FUNCTIONS
     async function loadPreview() {
-      await Promise.all([loadPreviewDraw(), loadPreviewFixtures(), loadPreviewStandings()])
+      await Promise.all([loadPreviewDraw(), loadPreviewFixtures()])
     }
 
     async function loadPreviewDraw() {
@@ -650,9 +702,10 @@
       }
       
       const html = data.map(item => `
-        <div class="preview-draw-card">
-          <div style="font-weight:600;margin-bottom:5px;">${item.player_name}</div>
-          <div style="color:#667eea;">${item.team_name}</div>
+        <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          ${item.team_logo ? `<img src="${item.team_logo}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">` : ''}
+          <div style="font-weight: 700; color: #0a2351; margin-bottom: 5px;">${item.player_name}</div>
+          <div style="color: #1a4b8c; font-weight: 600;">${item.team_name}</div>
         </div>
       `).join('')
       
@@ -669,15 +722,16 @@
       
       const html = data.map(match => {
         const hasScore = match.home_score !== null && match.away_score !== null
-        const scoreText = hasScore ? `${match.home_score} - ${match.away_score}` : '-'
+        const scoreText = hasScore ? `${match.home_score} - ${match.away_score}` : 'VS'
         
         return `
-          <div class="preview-match">
+          <div style="background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             <div>
-              <strong>${match.home_team}</strong> vs <strong>${match.away_team}</strong>
-              <span style="color:#999;margin-left:10px;">(Hafta ${match.week_number || 1})</span>
+              <strong style="color: #0a2351;">${match.home_team}</strong> 
+              <span style="color: #999; margin: 0 8px;">${scoreText}</span>
+              <strong style="color: #0a2351;">${match.away_team}</strong>
+              <span style="color: #999; margin-left: 10px; font-size: 12px;">(Hafta ${match.week_number || 1})</span>
             </div>
-            <div style="font-weight:bold;color:${hasScore ? '#667eea' : '#ccc'};">${scoreText}</div>
           </div>
         `
       }).join('')
@@ -685,95 +739,6 @@
       document.getElementById('preview-fixtures').innerHTML = html
     }
 
-    async function loadPreviewStandings() {
-      const { data: matches } = await adminSupabase.from('matches').select('*')
-      const { data: draw } = await adminSupabase.from('draw').select('*')
-      
-      if (!draw || draw.length === 0) {
-        document.getElementById('preview-standings').innerHTML = '<div style="text-align:center;color:#999;">Henüz kura yapılmadı</div>'
-        return
-      }
-      
-      // Calculate standings (simplified version)
-      const teams = {}
-      draw.forEach(item => {
-        teams[item.team_name] = {
-          team: item.team_name,
-          player: item.player_name,
-          played: 0,
-          points: 0,
-          gf: 0,
-          ga: 0,
-          gd: 0
-        }
-      })
-
-      if (matches) {
-        matches.forEach(match => {
-          if (match.home_score === null || match.away_score === null) return
-          
-          const home = teams[match.home_team]
-          const away = teams[match.away_team]
-          
-          if (!home || !away) return
-          
-          home.played++
-          away.played++
-          home.gf += match.home_score
-          home.ga += match.away_score
-          away.gf += match.away_score
-          away.ga += match.home_score
-          
-          if (match.home_score > match.away_score) {
-            home.points += 3
-          } else if (match.home_score < match.away_score) {
-            away.points += 3
-          } else {
-            home.points++
-            away.points++
-          }
-        })
-      }
-
-      Object.values(teams).forEach(team => {
-        team.gd = team.gf - team.ga
-      })
-
-      const standings = Object.values(teams).sort((a, b) => {
-        if (a.points !== b.points) return b.points - a.points
-        if (a.gd !== b.gd) return b.gd - a.gd
-        return b.gf - a.gf
-      })
-
-      const html = `
-        <table style="width:100%;border-collapse:collapse;">
-          <thead>
-            <tr style="background:#667eea;color:white;">
-              <th style="padding:10px;">#</th>
-              <th style="padding:10px;">Takım</th>
-              <th style="padding:10px;">O</th>
-              <th style="padding:10px;">P</th>
-              <th style="padding:10px;">Av</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${standings.map((team, i) => `
-              <tr style="border-bottom:1px solid #eee;">
-                <td style="padding:10px;font-weight:bold;">${i + 1}</td>
-                <td style="padding:10px;"><strong>${team.team}</strong><br><small style="color:#999;">${team.player}</small></td>
-                <td style="padding:10px;">${team.played}</td>
-                <td style="padding:10px;font-weight:bold;color:#667eea;">${team.points}</td>
-                <td style="padding:10px;">${team.gd > 0 ? '+' : ''}${team.gd}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `
-      
-      document.getElementById('preview-standings').innerHTML = html
-    }
-
-    // Auto-load on login
     if (localStorage.getItem('admin-logged-in') === 'true') {
       adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
       showAdminPanel()
