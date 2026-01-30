@@ -22,9 +22,6 @@
       border-left-color: #ff0000;
       color: #ff0000;
     }
-    .success {
-      border-left-color: #00ff00;
-    }
     button {
       background: #00ff00;
       color: #000;
@@ -40,10 +37,7 @@
   <h1>🔍 Supabase Debug Test</h1>
   
   <div>
-    <button onclick="testConnection()">1. Test Bağlantı</button>
-    <button onclick="testDraw()">2. Test Kura Tablosu</button>
-    <button onclick="testMatches()">3. Test Maçlar Tablosu</button>
-    <button onclick="testAll()">4. Hepsini Test Et</button>
+    <button onclick="testAll()">Test Et</button>
   </div>
   
   <div id="output"></div>
@@ -52,7 +46,7 @@
     const SUPABASE_URL = 'https://lioopzsrruwxudwptqer.supabase.co'
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxpb29wenNycnV3eHVkd3B0cWVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3Njc4MTcsImV4cCI6MjA4NTM0MzgxN30.pCN1IOGu2BcHYVb_B3BM0NEOtMr4mlGQLPokOiW1GPU'
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     
     function log(message, type = 'log') {
       const output = document.getElementById('output')
@@ -63,47 +57,25 @@
       console.log(message)
     }
 
-    async function testConnection() {
-      log('Testing connection...')
-      try {
-        const { data, error } = await supabase.from('draw').select('count')
-        if (error) throw error
-        log('✅ Bağlantı başarılı!', 'success')
-      } catch (error) {
-        log('❌ Bağlantı hatası: ' + error.message, 'error')
-      }
-    }
-
-    async function testDraw() {
-      log('Testing draw table...')
-      try {
-        const { data, error } = await supabase.from('draw').select('*')
-        if (error) throw error
-        log(`✅ Draw tablosu OK: ${data.length} kayıt`, 'success')
-        log('Data: ' + JSON.stringify(data, null, 2))
-      } catch (error) {
-        log('❌ Draw hatası: ' + error.message, 'error')
-      }
-    }
-
-    async function testMatches() {
-      log('Testing matches table...')
-      try {
-        const { data, error } = await supabase.from('matches').select('*')
-        if (error) throw error
-        log(`✅ Matches tablosu OK: ${data.length} kayıt`, 'success')
-        log('Data: ' + JSON.stringify(data, null, 2))
-      } catch (error) {
-        log('❌ Matches hatası: ' + error.message, 'error')
-      }
-    }
-
     async function testAll() {
       document.getElementById('output').innerHTML = ''
-      await testConnection()
-      await testDraw()
-      await testMatches()
-      log('=== Test tamamlandı ===', 'success')
+      log('Testing connection...')
+      
+      try {
+        const { data: drawData, error: drawError } = await sb.from('draw').select('*')
+        if (drawError) throw drawError
+        log(`✅ Draw: ${drawData.length} kayıt`)
+        console.log('Draw data:', drawData)
+        
+        const { data: matchData, error: matchError } = await sb.from('matches').select('*')
+        if (matchError) throw matchError
+        log(`✅ Matches: ${matchData.length} kayıt`)
+        console.log('Match data:', matchData)
+        
+        log('=== Test başarılı! ===', 'success')
+      } catch (error) {
+        log('❌ Hata: ' + error.message, 'error')
+      }
     }
 
     // Otomatik başlat
