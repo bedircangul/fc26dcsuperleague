@@ -18,55 +18,147 @@
       padding: 20px;
     }
     .container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
     }
-    .login-box, .admin-panel {
+    .login-box {
       background: white;
-      padding: 30px;
+      padding: 40px;
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    .login-box {
       max-width: 400px;
       margin: 100px auto;
       text-align: center;
     }
     .login-box h2 {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       color: #333;
     }
     .login-box input {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
       margin-bottom: 15px;
       border: 2px solid #ddd;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
     }
     .login-box button {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
       background: #f5576c;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
       font-weight: 600;
     }
-    .login-box button:hover {
-      background: #d6415a;
-    }
     .error {
       color: #f5576c;
       margin-top: 10px;
-      font-size: 14px;
+    }
+    .hidden {
+      display: none;
     }
     h1 {
       color: white;
       text-align: center;
       margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 15px;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+    .tab-content {
+      display: none;
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .btn-logout {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-primary {
+      background: #28a745;
+      color: white;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    .draw-item {
+      background: #f8f9fa;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border-left: 4px solid #f5576c;
+    }
+    .draw-item input, .draw-item select {
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .draw-item input {
+      flex: 1;
+    }
+    .draw-item select {
+      flex: 1;
     }
     .match-item {
       background: #f8f9fa;
@@ -76,83 +168,88 @@
       border-left: 4px solid #f5576c;
     }
     .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .match-title {
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 15px;
       color: #333;
     }
-    .score-inputs {
+    .match-week {
+      background: #667eea;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+    .match-controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .match-teams {
       display: flex;
       gap: 10px;
       align-items: center;
-      margin-bottom: 10px;
     }
-    .score-inputs input {
+    .match-teams select {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .match-score {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .match-score input {
       width: 60px;
-      padding: 8px;
+      padding: 10px;
       text-align: center;
       border: 2px solid #ddd;
       border-radius: 6px;
       font-size: 18px;
       font-weight: bold;
     }
-    .score-inputs span {
-      font-size: 18px;
-      font-weight: bold;
-      color: #666;
+    .match-week-input {
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
     }
     .match-actions {
       display: flex;
-      gap: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    .btn-save {
-      background: #28a745;
-      color: white;
-    }
-    .btn-save:hover {
-      background: #218838;
-    }
-    .btn-reset {
-      background: #ffc107;
-      color: #333;
-    }
-    .btn-reset:hover {
-      background: #e0a800;
-    }
-    .btn-logout {
-      background: #dc3545;
-      color: white;
-      margin-bottom: 20px;
-    }
-    .btn-logout:hover {
-      background: #c82333;
+      gap: 8px;
     }
     .success-msg {
       background: #d4edda;
       color: #155724;
-      padding: 10px;
+      padding: 12px;
       border-radius: 6px;
       margin-top: 10px;
       display: none;
     }
-    .hidden {
-      display: none;
+    .section {
+      margin-bottom: 30px;
     }
-    @media (max-width: 600px) {
-      .score-inputs {
-        flex-direction: column;
-        align-items: stretch;
+    .section h3 {
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    @media (max-width: 768px) {
+      .match-controls {
+        grid-template-columns: 1fr;
       }
-      .score-inputs input {
-        width: 100%;
+      .tabs {
+        flex-direction: column;
       }
     }
   </style>
@@ -160,20 +257,39 @@
 <body>
   <div id="login-screen" class="login-box">
     <h2>🔐 Admin Girişi</h2>
-    <input type="password" id="admin-password" placeholder="Admin Şifresi">
+    <input type="password" id="admin-password" placeholder="Admin Şifresi" onkeypress="if(event.key==='Enter') login()">
     <button onclick="login()">Giriş Yap</button>
     <div id="login-error" class="error"></div>
   </div>
 
   <div id="admin-screen" class="hidden">
     <div class="container">
-      <h1>⚙️ Admin Panel</h1>
-      <button class="btn-logout" onclick="logout()">Çıkış Yap</button>
+      <div class="panel-header">
+        <h1>⚙️ Admin Panel</h1>
+        <button class="btn btn-logout" onclick="logout()">Çıkış Yap</button>
+      </div>
       
-      <div class="admin-panel">
-        <h2 style="margin-bottom: 20px; color: #333;">📝 Maç Sonuçları</h2>
-        <div id="matches-list">
-          <p>Yükleniyor...</p>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('draw')">🎲 Kura Yönetimi</button>
+        <button class="tab-btn" onclick="switchTab('fixtures')">📋 Fikstür Yönetimi</button>
+      </div>
+
+      <div id="draw-tab" class="tab-content active">
+        <div class="section">
+          <h3>Takım Eşleşmeleri</h3>
+          <div id="draw-list"></div>
+          <button class="btn btn-primary" onclick="saveDraw()" style="margin-top: 15px;">💾 Tüm Değişiklikleri Kaydet</button>
+          <div id="draw-msg" class="success-msg"></div>
+        </div>
+      </div>
+
+      <div id="fixtures-tab" class="tab-content">
+        <div class="section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0;">Maçlar</h3>
+            <button class="btn btn-primary" onclick="addNewMatch()">➕ Yeni Maç Ekle</button>
+          </div>
+          <div id="matches-list"></div>
         </div>
       </div>
     </div>
@@ -185,6 +301,15 @@
     const ADMIN_PASSWORD = 'TurnuvaBedircan2024!'
 
     let adminSupabase = null
+    let teams = []
+    let players = [
+      'Bedircan', 'Deniz', 'Emre', 'Fatih', 'Gür', 
+      'İlker', 'Kürşat', 'Levent', 'Erhan', 'Furkan'
+    ]
+    let availableTeams = [
+      'Arsenal', 'Liverpool', 'PSG', 'Barcelona', 'Real Madrid',
+      'Manchester City', 'Bayern Munich', 'Inter', 'Atletico Madrid', 'Chelsea'
+    ]
 
     function login() {
       const password = document.getElementById('admin-password').value
@@ -199,96 +324,258 @@
 
     function logout() {
       localStorage.removeItem('admin-logged-in')
-      adminSupabase = null
       location.reload()
     }
 
     function showAdminPanel() {
       document.getElementById('login-screen').classList.add('hidden')
       document.getElementById('admin-screen').classList.remove('hidden')
+      loadDrawData()
       loadMatches()
     }
 
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'))
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'))
+      
+      document.getElementById(tab + '-tab').classList.add('active')
+      event.target.classList.add('active')
+    }
+
+    async function loadDrawData() {
+      const { data, error } = await adminSupabase.from('draw').select('*').order('player_name')
+      
+      if (error) {
+        console.error('Draw yükleme hatası:', error)
+      }
+      
+      teams = data || []
+      renderDraw()
+    }
+
+    function renderDraw() {
+      const usedTeams = teams.map(t => t.team_name)
+      
+      const html = players.map(player => {
+        const existing = teams.find(t => t.player_name === player)
+        const currentTeam = existing ? existing.team_name : ''
+        
+        const teamOptions = ['', ...availableTeams.filter(t => t === currentTeam || !usedTeams.includes(t))]
+        
+        return `
+          <div class="draw-item">
+            <input type="text" value="${player}" readonly style="flex: 0.8; background: #e9ecef;">
+            <select id="team-${player}" style="flex: 1.2;">
+              ${teamOptions.map(team => `
+                <option value="${team}" ${team === currentTeam ? 'selected' : ''}>
+                  ${team || '-- Takım Seç --'}
+                </option>
+              `).join('')}
+            </select>
+          </div>
+        `
+      }).join('')
+      
+      document.getElementById('draw-list').innerHTML = html
+    }
+
+    async function saveDraw() {
+      const updates = []
+      
+      for (const player of players) {
+        const teamSelect = document.getElementById(`team-${player}`)
+        const teamName = teamSelect.value
+        
+        if (teamName) {
+          updates.push({
+            player_name: player,
+            team_name: teamName
+          })
+        }
+      }
+      
+      try {
+        // Önce tüm kayıtları sil
+        await adminSupabase.from('draw').delete().neq('id', 0)
+        
+        // Yeni kayıtları ekle
+        if (updates.length > 0) {
+          const { error } = await adminSupabase.from('draw').insert(updates)
+          if (error) throw error
+        }
+        
+        showDrawMessage('✅ Kura başarıyla kaydedildi!')
+        await loadDrawData()
+      } catch (error) {
+        console.error('Kayıt hatası:', error)
+        alert('Hata: ' + error.message)
+      }
+    }
+
+    function showDrawMessage(text) {
+      const msg = document.getElementById('draw-msg')
+      msg.textContent = text
+      msg.style.display = 'block'
+      setTimeout(() => {
+        msg.style.display = 'none'
+      }, 3000)
+    }
+
     async function loadMatches() {
-      const { data, error } = await adminSupabase.from('matches').select('*').order('id')
+      const { data, error } = await adminSupabase.from('matches').select('*').order('week_number, id')
+      const { data: drawData } = await adminSupabase.from('draw').select('*')
+      
       if (error) {
         console.error('Maç yükleme hatası:', error)
-        alert('Maçlar yüklenemedi: ' + error.message)
         return
       }
-
-      const html = data.map(match => `
-        <div class="match-item">
+      
+      const teamList = drawData ? drawData.map(d => d.team_name) : availableTeams
+      
+      const html = (data || []).map(match => `
+        <div class="match-item" id="match-${match.id}">
           <div class="match-header">
-            ${match.home_team} vs ${match.away_team}
+            <div class="match-title">Maç #${match.id}</div>
+            <div class="match-week">Hafta ${match.week_number || 1}</div>
           </div>
-          <div class="score-inputs">
-            <input type="number" id="home-${match.id}" 
-                   value="${match.home_score !== null ? match.home_score : ''}" 
-                   placeholder="0" min="0" max="99">
-            <span>-</span>
-            <input type="number" id="away-${match.id}" 
-                   value="${match.away_score !== null ? match.away_score : ''}" 
-                   placeholder="0" min="0" max="99">
+          
+          <div class="match-controls">
+            <div class="match-teams">
+              <select id="home-team-${match.id}">
+                ${teamList.map(team => `
+                  <option value="${team}" ${team === match.home_team ? 'selected' : ''}>${team}</option>
+                `).join('')}
+              </select>
+              <span style="font-weight: bold; color: #666;">vs</span>
+              <select id="away-team-${match.id}">
+                ${teamList.map(team => `
+                  <option value="${team}" ${team === match.away_team ? 'selected' : ''}>${team}</option>
+                `).join('')}
+              </select>
+            </div>
+            
+            <div class="match-score">
+              <input type="number" id="home-score-${match.id}" 
+                     value="${match.home_score !== null ? match.home_score : ''}" 
+                     placeholder="0" min="0" max="99">
+              <span>-</span>
+              <input type="number" id="away-score-${match.id}" 
+                     value="${match.away_score !== null ? match.away_score : ''}" 
+                     placeholder="0" min="0" max="99">
+            </div>
+            
+            <input type="number" id="week-${match.id}" class="match-week-input" 
+                   value="${match.week_number || 1}" min="1" max="50" placeholder="Hafta">
+            
+            <div class="match-actions">
+              <button class="btn btn-primary" onclick="saveMatch(${match.id})">💾</button>
+              <button class="btn btn-warning" onclick="resetMatch(${match.id})">🔄</button>
+              <button class="btn btn-danger" onclick="deleteMatch(${match.id})">🗑️</button>
+            </div>
           </div>
-          <div class="match-actions">
-            <button class="btn-save" onclick="saveScore(${match.id})">💾 Kaydet</button>
-            <button class="btn-reset" onclick="resetScore(${match.id})">🔄 Sıfırla</button>
-          </div>
+          
           <div id="msg-${match.id}" class="success-msg"></div>
         </div>
       `).join('')
-
-      document.getElementById('matches-list').innerHTML = html
+      
+      document.getElementById('matches-list').innerHTML = html || '<p style="color: #666;">Henüz maç eklenmedi.</p>'
     }
 
-    async function saveScore(matchId) {
-      const homeScore = parseInt(document.getElementById(`home-${matchId}`).value)
-      const awayScore = parseInt(document.getElementById(`away-${matchId}`).value)
-
-      if (isNaN(homeScore) || isNaN(awayScore)) {
-        alert('Lütfen geçerli skor girin!')
+    async function addNewMatch() {
+      const { data: drawData } = await adminSupabase.from('draw').select('*')
+      const teamList = drawData ? drawData.map(d => d.team_name) : availableTeams
+      
+      if (teamList.length < 2) {
+        alert('Lütfen önce en az 2 takım ekleyin!')
         return
       }
-
+      
       try {
         const { data, error } = await adminSupabase
           .from('matches')
-          .update({ home_score: homeScore, away_score: awayScore })
-          .eq('id', matchId)
+          .insert({
+            home_team: teamList[0],
+            away_team: teamList[1],
+            week_number: 1
+          })
           .select()
-
+        
         if (error) throw error
-
-        showMessage(matchId, '✅ Skor kaydedildi!')
+        
+        await loadMatches()
       } catch (error) {
-        console.error('Kayıt hatası:', error)
-        alert('Kayıt sırasında hata: ' + error.message)
+        console.error('Maç ekleme hatası:', error)
+        alert('Hata: ' + error.message)
       }
     }
 
-    async function resetScore(matchId) {
-      if (!confirm('Bu maçın skorunu sıfırlamak istediğinize emin misiniz?')) return
+    async function saveMatch(matchId) {
+      const homeTeam = document.getElementById(`home-team-${matchId}`).value
+      const awayTeam = document.getElementById(`away-team-${matchId}`).value
+      const homeScore = document.getElementById(`home-score-${matchId}`).value
+      const awayScore = document.getElementById(`away-score-${matchId}`).value
+      const week = document.getElementById(`week-${matchId}`).value
 
       try {
-        const { data, error } = await adminSupabase
+        const { error } = await adminSupabase
+          .from('matches')
+          .update({
+            home_team: homeTeam,
+            away_team: awayTeam,
+            home_score: homeScore === '' ? null : parseInt(homeScore),
+            away_score: awayScore === '' ? null : parseInt(awayScore),
+            week_number: parseInt(week) || 1
+          })
+          .eq('id', matchId)
+
+        if (error) throw error
+
+        showMatchMessage(matchId, '✅ Kaydedildi!')
+      } catch (error) {
+        console.error('Kayıt hatası:', error)
+        alert('Hata: ' + error.message)
+      }
+    }
+
+    async function resetMatch(matchId) {
+      if (!confirm('Bu maçın skorunu sıfırlamak istediğinizden emin misiniz?')) return
+
+      try {
+        const { error } = await adminSupabase
           .from('matches')
           .update({ home_score: null, away_score: null })
           .eq('id', matchId)
-          .select()
 
         if (error) throw error
 
-        document.getElementById(`home-${matchId}`).value = ''
-        document.getElementById(`away-${matchId}`).value = ''
-        showMessage(matchId, '🔄 Skor sıfırlandı!')
+        document.getElementById(`home-score-${matchId}`).value = ''
+        document.getElementById(`away-score-${matchId}`).value = ''
+        showMatchMessage(matchId, '🔄 Skor sıfırlandı!')
       } catch (error) {
         console.error('Sıfırlama hatası:', error)
-        alert('Sıfırlama sırasında hata: ' + error.message)
+        alert('Hata: ' + error.message)
       }
     }
 
-    function showMessage(matchId, text) {
+    async function deleteMatch(matchId) {
+      if (!confirm('Bu maçı silmek istediğinizden emin misiniz?')) return
+
+      try {
+        const { error } = await adminSupabase
+          .from('matches')
+          .delete()
+          .eq('id', matchId)
+
+        if (error) throw error
+
+        await loadMatches()
+      } catch (error) {
+        console.error('Silme hatası:', error)
+        alert('Hata: ' + error.message)
+      }
+    }
+
+    function showMatchMessage(matchId, text) {
       const msg = document.getElementById(`msg-${matchId}`)
       msg.textContent = text
       msg.style.display = 'block'
