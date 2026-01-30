@@ -5,192 +5,286 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EA FC 26 Turnuvası</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0a2351 0%, #1a4b8c 50%, #0a2351 100%);
       min-height: 100vh;
       padding: 20px;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
     
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
     
     h1 {
-      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      color: #fff;
       text-align: center;
       margin: 20px 0;
-      font-size: 32px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-size: 48px;
+      text-shadow: 0 0 20px rgba(26, 75, 140, 0.8), 0 4px 8px rgba(0,0,0,0.5);
+      letter-spacing: 3px;
     }
     
     .tabs {
       display: flex;
       gap: 10px;
-      margin-bottom: 20px;
-      background: rgba(255,255,255,0.95);
-      padding: 10px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-bottom: 25px;
+      background: rgba(255,255,255,0.08);
+      padding: 12px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
     }
     
     .tab-btn {
       flex: 1;
-      padding: 15px;
-      background: #e9ecef;
+      padding: 18px;
+      background: rgba(255,255,255,0.05);
       border: 2px solid transparent;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      color: #495057;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
     }
     
     .tab-btn:hover {
-      background: #dee2e6;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
     }
     
     .tab-btn.active {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%);
       color: white;
-      border-color: #667eea;
+      border-color: #4a9eff;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(26, 75, 140, 0.6);
     }
     
     .tab-content {
       display: none;
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       min-height: 400px;
+      border: 1px solid rgba(255,255,255,0.2);
     }
     
     .tab-content.active {
       display: block;
-      animation: fadeIn 0.3s;
+      animation: fadeIn 0.4s;
     }
     
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
     h2 {
-      color: #333;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 3px solid #667eea;
+      color: #0a2351;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #1a4b8c;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 2px;
     }
     
     .draw-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
     }
     
     .draw-card {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .draw-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #1a4b8c, #0d5fcc);
     }
     
     .draw-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 20px rgba(26, 75, 140, 0.3);
+      border-color: #1a4b8c;
+    }
+    
+    .team-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     }
     
     .player-name {
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 8px;
+      font-weight: 700;
+      color: #0a2351;
+      margin-bottom: 5px;
       font-size: 18px;
     }
     
     .team-name {
-      color: #667eea;
+      color: #1a4b8c;
       font-size: 16px;
       font-weight: 600;
     }
     
     .week-section {
-      margin-bottom: 30px;
+      margin-bottom: 35px;
     }
     
     .week-title {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%);
       color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-size: 18px;
-      font-weight: 600;
+      padding: 15px 25px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(26, 75, 140, 0.4);
     }
     
     .match-item {
-      background: #f8f9fa;
-      padding: 18px;
-      margin-bottom: 12px;
-      border-radius: 8px;
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-left: 4px solid #667eea;
-      transition: all 0.2s;
+      border-left: 5px solid #1a4b8c;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     .match-item:hover {
-      background: #e9ecef;
       transform: translateX(5px);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 16px rgba(26, 75, 140, 0.2);
     }
     
-    .match-teams {
-      font-size: 16px;
-      color: #333;
-      font-weight: 600;
+    .match-team {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       flex: 1;
     }
     
+    .match-team-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    
+    .match-team-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .match-team-name {
+      font-weight: 700;
+      color: #0a2351;
+      font-size: 16px;
+    }
+    
+    .match-player-name {
+      font-size: 13px;
+      color: #6c757d;
+    }
+    
+    .match-score-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 0 20px;
+    }
+    
     .match-score {
-      font-size: 24px;
-      font-weight: bold;
-      color: #667eea;
-      min-width: 80px;
-      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a4b8c;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 2px;
     }
     
     .match-score.pending {
       color: #adb5bd;
-      font-size: 18px;
+      font-size: 20px;
+    }
+    
+    .vs-text {
+      font-weight: 600;
+      color: #6c757d;
+      font-size: 14px;
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     th, td {
-      padding: 14px 10px;
+      padding: 16px 12px;
       text-align: left;
       border-bottom: 1px solid #e9ecef;
     }
     
     th {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1a4b8c 0%, #0d5fcc 100%);
       color: white;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 14px;
       position: sticky;
       top: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
     }
     
     td {
@@ -201,31 +295,61 @@
       background: #f8f9fa;
     }
     
-    .rank {
-      font-weight: bold;
-      font-size: 18px;
+    .team-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    .rank-1 { color: #FFD700; }
-    .rank-2 { color: #C0C0C0; }
-    .rank-3 { color: #CD7F32; }
+    .team-cell-logo {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+    
+    .team-cell-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .team-cell-name {
+      font-weight: 700;
+      color: #0a2351;
+    }
+    
+    .team-cell-player {
+      font-size: 12px;
+      color: #6c757d;
+    }
+    
+    .rank {
+      font-weight: 700;
+      font-size: 20px;
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    
+    .rank-1 { color: #FFD700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    .rank-2 { color: #C0C0C0; text-shadow: 0 0 10px rgba(192, 192, 192, 0.5); }
+    .rank-3 { color: #CD7F32; text-shadow: 0 0 10px rgba(205, 127, 50, 0.5); }
     
     .loading, .error, .empty {
       text-align: center;
-      padding: 50px 20px;
+      padding: 60px 20px;
       font-size: 18px;
     }
     
     .loading { color: #6c757d; }
-    .error { color: #dc3545; background: #f8d7da; border-radius: 8px; }
+    .error { color: #dc3545; background: #f8d7da; border-radius: 10px; }
     .empty { color: #6c757d; }
     
     @media (max-width: 768px) {
-      h1 { font-size: 24px; }
+      h1 { font-size: 32px; }
       .tabs { flex-direction: column; }
       .draw-grid { grid-template-columns: 1fr; }
-      table { font-size: 12px; }
-      th, td { padding: 8px 5px; }
+      .match-item { flex-direction: column; gap: 15px; }
+      .match-score-section { padding: 0; }
+      table { font-size: 11px; }
+      th, td { padding: 10px 6px; }
     }
   </style>
 </head>
@@ -261,7 +385,6 @@
 
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-    // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const targetTab = this.getAttribute('data-tab')
@@ -271,24 +394,14 @@
         
         this.classList.add('active')
         document.getElementById(targetTab + '-content').classList.add('active')
-        
-        console.log('Switched to tab:', targetTab)
       })
     })
 
     async function loadDraw() {
-      console.log('Loading draw...')
       try {
         const { data, error } = await sb.from('draw').select('*').order('player_name')
         
-        if (error) {
-          console.error('Draw error:', error)
-          document.getElementById('draw-list').innerHTML = 
-            '<div class="error">❌ Veri yüklenemedi: ' + error.message + '</div>'
-          return
-        }
-        
-        console.log('Draw data:', data)
+        if (error) throw error
         
         if (!data || data.length === 0) {
           document.getElementById('draw-list').innerHTML = 
@@ -300,6 +413,7 @@
           <div class="draw-grid">
             ${data.map(item => `
               <div class="draw-card">
+                ${item.team_logo ? `<img src="${item.team_logo}" alt="${item.team_name}" class="team-logo" onerror="this.style.display='none'">` : ''}
                 <div class="player-name">👤 ${item.player_name}</div>
                 <div class="team-name">⚽ ${item.team_name}</div>
               </div>
@@ -309,34 +423,33 @@
         
         document.getElementById('draw-list').innerHTML = html
       } catch (error) {
-        console.error('Draw exception:', error)
         document.getElementById('draw-list').innerHTML = 
           '<div class="error">❌ Hata: ' + error.message + '</div>'
       }
     }
 
     async function loadFixtures() {
-      console.log('Loading fixtures...')
       try {
-        const { data, error } = await sb.from('matches').select('*').order('week_number, id')
+        const { data: matches, error: matchError } = await sb.from('matches').select('*').order('week_number, id')
+        const { data: draw, error: drawError } = await sb.from('draw').select('*')
         
-        if (error) {
-          console.error('Fixtures error:', error)
+        if (matchError) throw matchError
+        
+        if (!matches || matches.length === 0) {
           document.getElementById('fixtures-list').innerHTML = 
-            '<div class="error">❌ Veri yüklenemedi: ' + error.message + '</div>'
+            '<div class="empty">Henüz maç eklenmedi.</div>'
           return
         }
         
-        console.log('Fixtures data:', data)
-        
-        if (!data || data.length === 0) {
-          document.getElementById('fixtures-list').innerHTML = 
-            '<div class="empty">Henüz maç eklenmedi. Admin panelden maç ekleyin.</div>'
-          return
+        const teamData = {}
+        if (draw) {
+          draw.forEach(d => {
+            teamData[d.team_name] = { player: d.player_name, logo: d.team_logo || '' }
+          })
         }
         
         const weeks = {}
-        data.forEach(match => {
+        matches.forEach(match => {
           const week = match.week_number || 1
           if (!weeks[week]) weeks[week] = []
           weeks[week].push(match)
@@ -351,18 +464,33 @@
           
           weeks[week].forEach(match => {
             const hasScore = match.home_score !== null && match.away_score !== null
-            const scoreDisplay = hasScore 
-              ? `<div class="match-score">${match.home_score} - ${match.away_score}</div>`
-              : `<div class="match-score pending">-</div>`
+            const homeTeam = teamData[match.home_team] || { player: '', logo: '' }
+            const awayTeam = teamData[match.away_team] || { player: '', logo: '' }
             
             html += `
               <div class="match-item">
-                <div class="match-teams">
-                  <strong>${match.home_team}</strong> 
-                  <span style="color:#999; margin: 0 8px;">vs</span> 
-                  <strong>${match.away_team}</strong>
+                <div class="match-team">
+                  ${homeTeam.logo ? `<img src="${homeTeam.logo}" class="match-team-logo" onerror="this.style.display='none'">` : ''}
+                  <div class="match-team-info">
+                    <div class="match-team-name">${match.home_team}</div>
+                    ${homeTeam.player ? `<div class="match-player-name">${homeTeam.player}</div>` : ''}
+                  </div>
                 </div>
-                ${scoreDisplay}
+                
+                <div class="match-score-section">
+                  ${hasScore 
+                    ? `<div class="match-score">${match.home_score} - ${match.away_score}</div>`
+                    : `<div class="match-score pending vs-text">VS</div>`
+                  }
+                </div>
+                
+                <div class="match-team" style="justify-content: flex-end;">
+                  <div class="match-team-info" style="text-align: right;">
+                    <div class="match-team-name">${match.away_team}</div>
+                    ${awayTeam.player ? `<div class="match-player-name">${awayTeam.player}</div>` : ''}
+                  </div>
+                  ${awayTeam.logo ? `<img src="${awayTeam.logo}" class="match-team-logo" onerror="this.style.display='none'">` : ''}
+                </div>
               </div>
             `
           })
@@ -372,31 +500,19 @@
         
         document.getElementById('fixtures-list').innerHTML = html
       } catch (error) {
-        console.error('Fixtures exception:', error)
         document.getElementById('fixtures-list').innerHTML = 
           '<div class="error">❌ Hata: ' + error.message + '</div>'
       }
     }
 
     async function loadStandings() {
-      console.log('Loading standings...')
       try {
-        const { data: matches, error: matchError } = await sb.from('matches').select('*')
-        const { data: draw, error: drawError } = await sb.from('draw').select('*')
-        
-        if (matchError || drawError) {
-          const error = matchError || drawError
-          console.error('Standings error:', error)
-          document.getElementById('standings-list').innerHTML = 
-            '<div class="error">❌ Veri yüklenemedi: ' + error.message + '</div>'
-          return
-        }
-        
-        console.log('Standings - matches:', matches, 'draw:', draw)
+        const { data: matches } = await sb.from('matches').select('*')
+        const { data: draw } = await sb.from('draw').select('*')
         
         if (!draw || draw.length === 0) {
           document.getElementById('standings-list').innerHTML = 
-            '<div class="empty">Henüz kura yapılmadı. Admin panelden kura oluşturun.</div>'
+            '<div class="empty">Henüz kura yapılmadı.</div>'
           return
         }
         
@@ -405,6 +521,7 @@
           teams[item.team_name] = {
             team: item.team_name,
             player: item.player_name,
+            logo: item.team_logo || '',
             played: 0,
             won: 0,
             drawn: 0,
@@ -417,7 +534,7 @@
           }
         })
 
-        if (matches && matches.length > 0) {
+        if (matches) {
           matches.forEach(match => {
             if (match.home_score === null || match.away_score === null) return
             
@@ -482,7 +599,6 @@
                 <tr>
                   <th>#</th>
                   <th>Takım</th>
-                  <th>Oyuncu</th>
                   <th>O</th>
                   <th>G</th>
                   <th>B</th>
@@ -496,23 +612,30 @@
               <tbody>
                 ${standings.map((team, index) => {
                   const rankClass = index < 3 ? `rank rank-${index + 1}` : 'rank'
-                  const gdColor = team.gd > 0 ? 'green' : team.gd < 0 ? 'red' : '#333'
+                  const gdColor = team.gd > 0 ? '#28a745' : team.gd < 0 ? '#dc3545' : '#333'
                   
                   return `
                     <tr>
                       <td class="${rankClass}">${index + 1}</td>
-                      <td><strong>${team.team}</strong></td>
-                      <td>${team.player}</td>
+                      <td>
+                        <div class="team-cell">
+                          ${team.logo ? `<img src="${team.logo}" class="team-cell-logo" onerror="this.style.display='none'">` : ''}
+                          <div class="team-cell-info">
+                            <div class="team-cell-name">${team.team}</div>
+                            <div class="team-cell-player">${team.player}</div>
+                          </div>
+                        </div>
+                      </td>
                       <td>${team.played}</td>
                       <td>${team.won}</td>
                       <td>${team.drawn}</td>
                       <td>${team.lost}</td>
                       <td>${team.gf}</td>
                       <td>${team.ga}</td>
-                      <td style="color: ${gdColor}; font-weight: 600;">
+                      <td style="color: ${gdColor}; font-weight: 700;">
                         ${team.gd > 0 ? '+' : ''}${team.gd}
                       </td>
-                      <td><strong style="color: #667eea; font-size: 16px;">${team.points}</strong></td>
+                      <td><strong style="color: #1a4b8c; font-size: 18px; font-family: 'Bebas Neue', sans-serif;">${team.points}</strong></td>
                     </tr>
                   `
                 }).join('')}
@@ -523,26 +646,22 @@
         
         document.getElementById('standings-list').innerHTML = html
       } catch (error) {
-        console.error('Standings exception:', error)
         document.getElementById('standings-list').innerHTML = 
           '<div class="error">❌ Hata: ' + error.message + '</div>'
       }
     }
 
     async function loadAll() {
-      console.log('Loading all data...')
       await Promise.all([loadDraw(), loadFixtures(), loadStandings()])
     }
 
     sb
       .channel('public-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'matches' }, () => {
-        console.log('Matches changed, reloading...')
         loadFixtures()
         loadStandings()
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'draw' }, () => {
-        console.log('Draw changed, reloading...')
         loadDraw()
         loadStandings()
       })
@@ -550,10 +669,7 @@
 
     setInterval(loadAll, 30000)
 
-    window.addEventListener('DOMContentLoaded', () => {
-      console.log('Page loaded, starting data load...')
-      loadAll()
-    })
+    window.addEventListener('DOMContentLoaded', loadAll)
   </script>
 </body>
 </html>
