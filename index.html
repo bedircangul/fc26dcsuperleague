@@ -346,9 +346,63 @@
       h1 { font-size: 32px; }
       .tabs { flex-direction: column; }
       .draw-grid { grid-template-columns: 1fr; }
-      .match-item { flex-direction: column; gap: 15px; }
-      .match-score-section { padding: 0; }
-      table { font-size: 11px; }
+      
+      .match-item { 
+        flex-direction: row;
+        padding: 12px;
+        gap: 8px;
+      }
+      
+      .match-team {
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .match-team-logo {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .match-team-name {
+        font-size: 13px;
+      }
+      
+      .match-player-name {
+        font-size: 11px;
+      }
+      
+      .match-score-section {
+        padding: 0;
+        gap: 8px;
+      }
+      
+      .match-score {
+        font-size: 20px;
+      }
+      
+      .week-title {
+        font-size: 18px;
+        padding: 10px 15px;
+      }
+      
+      /* Mobilde sadece önemli kolonlar */
+      table th:nth-child(4),
+      table th:nth-child(5),
+      table th:nth-child(6),
+      table th:nth-child(7),
+      table th:nth-child(8) {
+        display: none;
+      }
+      
+      table td:nth-child(4),
+      table td:nth-child(5),
+      table td:nth-child(6),
+      table td:nth-child(7),
+      table td:nth-child(8) {
+        display: none;
+      }
+      
+      table { font-size: 12px; }
       th, td { padding: 10px 6px; }
     }
   </style>
