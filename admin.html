@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - EA FC 26</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .login-box, .admin-panel {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .login-box {
+      max-width: 400px;
+      margin: 100px auto;
+      text-align: center;
+    }
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background: #f5576c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .login-box button:hover {
+      background: #d6415a;
+    }
+    .error {
+      color: #f5576c;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .match-item {
+      background: #f8f9fa;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #f5576c;
+    }
+    .match-header {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .score-inputs {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .score-inputs input {
+      width: 60px;
+      padding: 8px;
+      text-align: center;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .score-inputs span {
+      font-size: 18px;
+      font-weight: bold;
+      color: #666;
+    }
+    .match-actions {
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-save {
+      background: #28a745;
+      color: white;
+    }
+    .btn-save:hover {
+      background: #218838;
+    }
+    .btn-reset {
+      background: #ffc107;
+      color: #333;
+    }
+    .btn-reset:hover {
+      background: #e0a800;
+    }
+    .btn-logout {
+      background: #dc3545;
+      color: white;
+      margin-bottom: 20px;
+    }
+    .btn-logout:hover {
+      background: #c82333;
+    }
+    .success-msg {
+      background: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+      display: none;
+    }
+    .hidden {
+      display: none;
+    }
+    @media (max-width: 600px) {
+      .score-inputs {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .score-inputs input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="login-screen" class="login-box">
+    <h2>🔐 Admin Girişi</h2>
+    <input type="password" id="admin-password" placeholder="Admin Şifresi">
+    <button onclick="login()">Giriş Yap</button>
+    <div id="login-error" class="error"></div>
+  </div>
+
+  <div id="admin-screen" class="hidden">
+    <div class="container">
+      <h1>⚙️ Admin Panel</h1>
+      <button class="btn-logout" onclick="logout()">Çıkış Yap</button>
+      
+      <div class="admin-panel">
+        <h2 style="margin-bottom: 20px; color: #333;">📝 Maç Sonuçları</h2>
+        <div id="matches-list">
+          <p>Yükleniyor...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://lioopzsrruwxudwptqer.supabase.co'
+    const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxpb29wenNycnV3eHVkd3B0cWVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTc2NzgxNywiZXhwIjoyMDg1MzQzODE3fQ.xUcopV1TEzrXmVAKLyKP-xfgfNNGyg4KLCIwZdzBQEs'
+    const ADMIN_PASSWORD = 'TurnuvaBedircan2024!'
+
+    let adminSupabase = null
+
+    function login() {
+      const password = document.getElementById('admin-password').value
+      if (password === ADMIN_PASSWORD) {
+        localStorage.setItem('admin-logged-in', 'true')
+        adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+        showAdminPanel()
+      } else {
+        document.getElementById('login-error').textContent = 'Hatalı şifre!'
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('admin-logged-in')
+      adminSupabase = null
+      location.reload()
+    }
+
+    function showAdminPanel() {
+      document.getElementById('login-screen').classList.add('hidden')
+      document.getElementById('admin-screen').classList.remove('hidden')
+      loadMatches()
+    }
+
+    async function loadMatches() {
+      const { data, error } = await adminSupabase.from('matches').select('*').order('id')
+      if (error) {
+        console.error('Maç yükleme hatası:', error)
+        alert('Maçlar yüklenemedi: ' + error.message)
+        return
+      }
+
+      const html = data.map(match => `
+        <div class="match-item">
+          <div class="match-header">
+            ${match.home_team} vs ${match.away_team}
+          </div>
+          <div class="score-inputs">
+            <input type="number" id="home-${match.id}" 
+                   value="${match.home_score !== null ? match.home_score : ''}" 
+                   placeholder="0" min="0" max="99">
+            <span>-</span>
+            <input type="number" id="away-${match.id}" 
+                   value="${match.away_score !== null ? match.away_score : ''}" 
+                   placeholder="0" min="0" max="99">
+          </div>
+          <div class="match-actions">
+            <button class="btn-save" onclick="saveScore(${match.id})">💾 Kaydet</button>
+            <button class="btn-reset" onclick="resetScore(${match.id})">🔄 Sıfırla</button>
+          </div>
+          <div id="msg-${match.id}" class="success-msg"></div>
+        </div>
+      `).join('')
+
+      document.getElementById('matches-list').innerHTML = html
+    }
+
+    async function saveScore(matchId) {
+      const homeScore = parseInt(document.getElementById(`home-${matchId}`).value)
+      const awayScore = parseInt(document.getElementById(`away-${matchId}`).value)
+
+      if (isNaN(homeScore) || isNaN(awayScore)) {
+        alert('Lütfen geçerli skor girin!')
+        return
+      }
+
+      try {
+        const { data, error } = await adminSupabase
+          .from('matches')
+          .update({ home_score: homeScore, away_score: awayScore })
+          .eq('id', matchId)
+          .select()
+
+        if (error) throw error
+
+        showMessage(matchId, '✅ Skor kaydedildi!')
+      } catch (error) {
+        console.error('Kayıt hatası:', error)
+        alert('Kayıt sırasında hata: ' + error.message)
+      }
+    }
+
+    async function resetScore(matchId) {
+      if (!confirm('Bu maçın skorunu sıfırlamak istediğinize emin misiniz?')) return
+
+      try {
+        const { data, error } = await adminSupabase
+          .from('matches')
+          .update({ home_score: null, away_score: null })
+          .eq('id', matchId)
+          .select()
+
+        if (error) throw error
+
+        document.getElementById(`home-${matchId}`).value = ''
+        document.getElementById(`away-${matchId}`).value = ''
+        showMessage(matchId, '🔄 Skor sıfırlandı!')
+      } catch (error) {
+        console.error('Sıfırlama hatası:', error)
+        alert('Sıfırlama sırasında hata: ' + error.message)
+      }
+    }
+
+    function showMessage(matchId, text) {
+      const msg = document.getElementById(`msg-${matchId}`)
+      msg.textContent = text
+      msg.style.display = 'block'
+      setTimeout(() => {
+        msg.style.display = 'none'
+      }, 3000)
+    }
+
+    // Sayfa yüklendiğinde kontrol
+    if (localStorage.getItem('admin-logged-in') === 'true') {
+      adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+      showAdminPanel()
+    }
+  </script>
+</body>
+</html>
