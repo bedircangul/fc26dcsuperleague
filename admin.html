@@ -6,21 +6,17 @@
   <title>Admin Panel - EA FC 26</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
       min-height: 100vh;
       padding: 20px;
     }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    
+    .container { max-width: 1400px; margin: 0 auto; }
+    
     .login-box {
       background: white;
       padding: 40px;
@@ -30,10 +26,9 @@
       margin: 100px auto;
       text-align: center;
     }
-    .login-box h2 {
-      margin-bottom: 25px;
-      color: #333;
-    }
+    
+    .login-box h2 { margin-bottom: 25px; color: #333; }
+    
     .login-box input {
       width: 100%;
       padding: 15px;
@@ -42,6 +37,7 @@
       border-radius: 8px;
       font-size: 16px;
     }
+    
     .login-box button {
       width: 100%;
       padding: 15px;
@@ -53,19 +49,27 @@
       cursor: pointer;
       font-weight: 600;
     }
-    .error {
-      color: #f5576c;
-      margin-top: 10px;
-    }
-    .hidden {
-      display: none;
-    }
-    h1 {
-      color: white;
-      text-align: center;
+    
+    .error { color: #f5576c; margin-top: 10px; }
+    .hidden { display: none; }
+    
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
       margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
+    
+    h1 {
+      color: #333;
+      font-size: 28px;
+      margin: 0;
+    }
+    
     .tabs {
       display: flex;
       gap: 10px;
@@ -73,22 +77,27 @@
       background: white;
       padding: 10px;
       border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
+    
     .tab-btn {
       flex: 1;
       padding: 15px;
-      background: #f0f0f0;
+      background: #e9ecef;
       border: none;
       border-radius: 8px;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
+      color: #495057;
     }
+    
     .tab-btn.active {
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
       color: white;
     }
+    
     .tab-content {
       display: none;
       background: white;
@@ -96,15 +105,9 @@
       padding: 25px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    .tab-content.active {
-      display: block;
-    }
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+    
+    .tab-content.active { display: block; }
+    
     .btn {
       padding: 12px 24px;
       border: none;
@@ -114,30 +117,30 @@
       font-size: 14px;
       transition: all 0.3s;
     }
-    .btn-logout {
-      background: #dc3545;
-      color: white;
+    
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    
+    .btn-logout { background: #dc3545; color: white; }
+    .btn-primary { background: #28a745; color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-warning { background: #ffc107; color: #333; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-info { background: #17a2b8; color: white; }
+    
+    .section {
+      margin-bottom: 30px;
     }
-    .btn-primary {
-      background: #28a745;
-      color: white;
-    }
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
-    }
-    .btn-warning {
-      background: #ffc107;
+    
+    .section h3 {
       color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .btn-danger {
-      background: #dc3545;
-      color: white;
-    }
-    .btn:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
+    
     .draw-item {
       background: #f8f9fa;
       padding: 15px;
@@ -148,18 +151,22 @@
       align-items: center;
       border-left: 4px solid #f5576c;
     }
-    .draw-item input, .draw-item select {
+    
+    .draw-item label {
+      flex: 0 0 120px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .draw-item select {
+      flex: 1;
       padding: 10px;
       border: 2px solid #ddd;
       border-radius: 6px;
       font-size: 14px;
+      background: white;
     }
-    .draw-item input {
-      flex: 1;
-    }
-    .draw-item select {
-      flex: 1;
-    }
+    
     .match-item {
       background: #f8f9fa;
       padding: 20px;
@@ -167,17 +174,20 @@
       border-radius: 8px;
       border-left: 4px solid #f5576c;
     }
+    
     .match-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
     }
+    
     .match-title {
       font-size: 16px;
       font-weight: bold;
       color: #333;
     }
+    
     .match-week {
       background: #667eea;
       color: white;
@@ -185,17 +195,20 @@
       border-radius: 5px;
       font-size: 13px;
     }
+    
     .match-controls {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-columns: 2fr 120px 80px 200px;
       gap: 10px;
-      margin-bottom: 10px;
+      align-items: center;
     }
+    
     .match-teams {
       display: flex;
       gap: 10px;
       align-items: center;
     }
+    
     .match-teams select {
       flex: 1;
       padding: 10px;
@@ -203,30 +216,36 @@
       border-radius: 6px;
       font-size: 14px;
     }
+    
     .match-score {
       display: flex;
       gap: 5px;
       align-items: center;
     }
+    
     .match-score input {
-      width: 60px;
-      padding: 10px;
+      width: 50px;
+      padding: 10px 5px;
       text-align: center;
       border: 2px solid #ddd;
       border-radius: 6px;
       font-size: 18px;
       font-weight: bold;
     }
+    
     .match-week-input {
       padding: 10px;
       border: 2px solid #ddd;
       border-radius: 6px;
       font-size: 14px;
+      text-align: center;
     }
+    
     .match-actions {
       display: flex;
-      gap: 8px;
+      gap: 5px;
     }
+    
     .success-msg {
       background: #d4edda;
       color: #155724;
@@ -235,15 +254,45 @@
       margin-top: 10px;
       display: none;
     }
-    .section {
-      margin-bottom: 30px;
+    
+    /* Preview styles */
+    .preview-box {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border: 2px solid #667eea;
     }
-    .section h3 {
-      color: #333;
+    
+    .preview-box h4 {
+      color: #667eea;
       margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #f0f0f0;
     }
+    
+    .preview-draw-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .preview-draw-card {
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .preview-match {
+      background: white;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
     @media (max-width: 768px) {
       .match-controls {
         grid-template-columns: 1fr;
@@ -264,32 +313,73 @@
 
   <div id="admin-screen" class="hidden">
     <div class="container">
-      <div class="panel-header">
-        <h1>⚙️ Admin Panel</h1>
+      <div class="header">
+        <h1>⚙️ Turnuva Admin Paneli</h1>
         <button class="btn btn-logout" onclick="logout()">Çıkış Yap</button>
       </div>
       
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('draw')">🎲 Kura Yönetimi</button>
-        <button class="tab-btn" onclick="switchTab('fixtures')">📋 Fikstür Yönetimi</button>
+        <button class="tab-btn active" data-tab="draw">🎲 Kura Yönetimi</button>
+        <button class="tab-btn" data-tab="fixtures">📋 Fikstür Yönetimi</button>
+        <button class="tab-btn" data-tab="preview">👁️ Önizleme</button>
       </div>
 
-      <div id="draw-tab" class="tab-content active">
+      <!-- KURA TAB -->
+      <div id="draw-content" class="tab-content active">
         <div class="section">
-          <h3>Takım Eşleşmeleri</h3>
+          <h3>
+            <span>Takım Eşleşmeleri</span>
+          </h3>
+          <p style="color: #666; margin-bottom: 15px;">
+            Her oyuncu için istediğiniz takımı seçin. Aynı takımı birden fazla oyuncuya atayabilirsiniz.
+          </p>
           <div id="draw-list"></div>
-          <button class="btn btn-primary" onclick="saveDraw()" style="margin-top: 15px;">💾 Tüm Değişiklikleri Kaydet</button>
+          <button class="btn btn-primary" onclick="saveDraw()" style="margin-top: 15px;">
+            💾 Tüm Değişiklikleri Kaydet
+          </button>
           <div id="draw-msg" class="success-msg"></div>
         </div>
       </div>
 
-      <div id="fixtures-tab" class="tab-content">
+      <!-- FIKSTÜR TAB -->
+      <div id="fixtures-content" class="tab-content">
         <div class="section">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="margin: 0;">Maçlar</h3>
+          <h3>
+            <span>Maçlar</span>
             <button class="btn btn-primary" onclick="addNewMatch()">➕ Yeni Maç Ekle</button>
-          </div>
+          </h3>
           <div id="matches-list"></div>
+        </div>
+      </div>
+
+      <!-- ÖNİZLEME TAB -->
+      <div id="preview-content" class="tab-content">
+        <div class="section">
+          <h3>👁️ Kullanıcıların Gördüğü Sayfa</h3>
+          <p style="color: #666; margin-bottom: 15px;">
+            Bu, kullanıcıların public sayfada gördüğü içerik. Değişiklikler otomatik yansır.
+          </p>
+          
+          <div class="preview-box">
+            <h4>🎲 Kura</h4>
+            <div id="preview-draw" class="preview-draw-grid">
+              <div style="text-align: center; color: #999;">Yükleniyor...</div>
+            </div>
+          </div>
+          
+          <div class="preview-box">
+            <h4>📋 Fikstür (Son 10 Maç)</h4>
+            <div id="preview-fixtures">
+              <div style="text-align: center; color: #999;">Yükleniyor...</div>
+            </div>
+          </div>
+          
+          <div class="preview-box">
+            <h4>🏆 Puan Durumu</h4>
+            <div id="preview-standings" style="overflow-x: auto;">
+              <div style="text-align: center; color: #999;">Yükleniyor...</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -301,15 +391,8 @@
     const ADMIN_PASSWORD = 'TurnuvaBedircan2024!'
 
     let adminSupabase = null
-    let teams = []
-    let players = [
-      'Bedircan', 'Deniz', 'Emre', 'Fatih', 'Gür', 
-      'İlker', 'Kürşat', 'Levent', 'Erhan', 'Furkan'
-    ]
-    let availableTeams = [
-      'Arsenal', 'Liverpool', 'PSG', 'Barcelona', 'Real Madrid',
-      'Manchester City', 'Bayern Munich', 'Inter', 'Atletico Madrid', 'Chelsea'
-    ]
+    const players = ['Bedircan', 'Deniz', 'Emre', 'Fatih', 'Gür', 'İlker', 'Kürşat', 'Levent', 'Erhan', 'Furkan']
+    const allTeams = ['Arsenal', 'Liverpool', 'PSG', 'Barcelona', 'Real Madrid', 'Manchester City', 'Bayern Munich', 'Inter', 'Atletico Madrid', 'Chelsea', 'Tottenham', 'Manchester United', 'AC Milan', 'Juventus', 'Borussia Dortmund']
 
     function login() {
       const password = document.getElementById('admin-password').value
@@ -332,44 +415,41 @@
       document.getElementById('admin-screen').classList.remove('hidden')
       loadDrawData()
       loadMatches()
+      loadPreview()
     }
 
-    function switchTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'))
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'))
-      
-      document.getElementById(tab + '-tab').classList.add('active')
-      event.target.classList.add('active')
-    }
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetTab = this.getAttribute('data-tab')
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'))
+        
+        this.classList.add('active')
+        document.getElementById(targetTab + '-content').classList.add('active')
+        
+        if (targetTab === 'preview') {
+          loadPreview()
+        }
+      })
+    })
 
     async function loadDrawData() {
-      const { data, error } = await adminSupabase.from('draw').select('*').order('player_name')
-      
-      if (error) {
-        console.error('Draw yükleme hatası:', error)
-      }
-      
-      teams = data || []
-      renderDraw()
-    }
-
-    function renderDraw() {
-      const usedTeams = teams.map(t => t.team_name)
+      const { data } = await adminSupabase.from('draw').select('*')
+      const existing = data || []
       
       const html = players.map(player => {
-        const existing = teams.find(t => t.player_name === player)
-        const currentTeam = existing ? existing.team_name : ''
-        
-        const teamOptions = ['', ...availableTeams.filter(t => t === currentTeam || !usedTeams.includes(t))]
+        const current = existing.find(e => e.player_name === player)
+        const currentTeam = current ? current.team_name : ''
         
         return `
           <div class="draw-item">
-            <input type="text" value="${player}" readonly style="flex: 0.8; background: #e9ecef;">
-            <select id="team-${player}" style="flex: 1.2;">
-              ${teamOptions.map(team => `
-                <option value="${team}" ${team === currentTeam ? 'selected' : ''}>
-                  ${team || '-- Takım Seç --'}
-                </option>
+            <label>${player}</label>
+            <select id="team-${player}">
+              <option value="">-- Takım Seç --</option>
+              ${allTeams.map(team => `
+                <option value="${team}" ${team === currentTeam ? 'selected' : ''}>${team}</option>
               `).join('')}
             </select>
           </div>
@@ -387,25 +467,20 @@
         const teamName = teamSelect.value
         
         if (teamName) {
-          updates.push({
-            player_name: player,
-            team_name: teamName
-          })
+          updates.push({ player_name: player, team_name: teamName })
         }
       }
       
       try {
-        // Önce tüm kayıtları sil
         await adminSupabase.from('draw').delete().neq('id', 0)
         
-        // Yeni kayıtları ekle
         if (updates.length > 0) {
           const { error } = await adminSupabase.from('draw').insert(updates)
           if (error) throw error
         }
         
         showDrawMessage('✅ Kura başarıyla kaydedildi!')
-        await loadDrawData()
+        setTimeout(loadPreview, 1000)
       } catch (error) {
         console.error('Kayıt hatası:', error)
         alert('Hata: ' + error.message)
@@ -416,21 +491,14 @@
       const msg = document.getElementById('draw-msg')
       msg.textContent = text
       msg.style.display = 'block'
-      setTimeout(() => {
-        msg.style.display = 'none'
-      }, 3000)
+      setTimeout(() => msg.style.display = 'none', 3000)
     }
 
     async function loadMatches() {
-      const { data, error } = await adminSupabase.from('matches').select('*').order('week_number, id')
+      const { data } = await adminSupabase.from('matches').select('*').order('week_number, id')
       const { data: drawData } = await adminSupabase.from('draw').select('*')
       
-      if (error) {
-        console.error('Maç yükleme hatası:', error)
-        return
-      }
-      
-      const teamList = drawData ? drawData.map(d => d.team_name) : availableTeams
+      const teamList = drawData && drawData.length > 0 ? drawData.map(d => d.team_name) : allTeams.slice(0, 10)
       
       const html = (data || []).map(match => `
         <div class="match-item" id="match-${match.id}">
@@ -446,7 +514,7 @@
                   <option value="${team}" ${team === match.home_team ? 'selected' : ''}>${team}</option>
                 `).join('')}
               </select>
-              <span style="font-weight: bold; color: #666;">vs</span>
+              <span style="font-weight: bold;">vs</span>
               <select id="away-team-${match.id}">
                 ${teamList.map(team => `
                   <option value="${team}" ${team === match.away_team ? 'selected' : ''}>${team}</option>
@@ -478,30 +546,26 @@
         </div>
       `).join('')
       
-      document.getElementById('matches-list').innerHTML = html || '<p style="color: #666;">Henüz maç eklenmedi.</p>'
+      document.getElementById('matches-list').innerHTML = html || '<p style="color: #666;">Henüz maç yok.</p>'
     }
 
     async function addNewMatch() {
       const { data: drawData } = await adminSupabase.from('draw').select('*')
-      const teamList = drawData ? drawData.map(d => d.team_name) : availableTeams
+      const teamList = drawData && drawData.length >= 2 ? drawData.map(d => d.team_name) : allTeams.slice(0, 2)
       
       if (teamList.length < 2) {
-        alert('Lütfen önce en az 2 takım ekleyin!')
+        alert('Lütfen önce en az 2 takım atayın!')
         return
       }
       
       try {
-        const { data, error } = await adminSupabase
-          .from('matches')
-          .insert({
-            home_team: teamList[0],
-            away_team: teamList[1],
-            week_number: 1
-          })
-          .select()
+        const { error } = await adminSupabase.from('matches').insert({
+          home_team: teamList[0],
+          away_team: teamList[1],
+          week_number: 1
+        })
         
         if (error) throw error
-        
         await loadMatches()
       } catch (error) {
         console.error('Maç ekleme hatası:', error)
@@ -517,42 +581,37 @@
       const week = document.getElementById(`week-${matchId}`).value
 
       try {
-        const { error } = await adminSupabase
-          .from('matches')
-          .update({
-            home_team: homeTeam,
-            away_team: awayTeam,
-            home_score: homeScore === '' ? null : parseInt(homeScore),
-            away_score: awayScore === '' ? null : parseInt(awayScore),
-            week_number: parseInt(week) || 1
-          })
-          .eq('id', matchId)
+        const { error } = await adminSupabase.from('matches').update({
+          home_team: homeTeam,
+          away_team: awayTeam,
+          home_score: homeScore === '' ? null : parseInt(homeScore),
+          away_score: awayScore === '' ? null : parseInt(awayScore),
+          week_number: parseInt(week) || 1
+        }).eq('id', matchId)
 
         if (error) throw error
-
         showMatchMessage(matchId, '✅ Kaydedildi!')
+        setTimeout(loadPreview, 1000)
       } catch (error) {
-        console.error('Kayıt hatası:', error)
         alert('Hata: ' + error.message)
       }
     }
 
     async function resetMatch(matchId) {
-      if (!confirm('Bu maçın skorunu sıfırlamak istediğinizden emin misiniz?')) return
+      if (!confirm('Skoru sıfırlamak istediğinizden emin misiniz?')) return
 
       try {
-        const { error } = await adminSupabase
-          .from('matches')
-          .update({ home_score: null, away_score: null })
-          .eq('id', matchId)
+        const { error } = await adminSupabase.from('matches').update({ 
+          home_score: null, 
+          away_score: null 
+        }).eq('id', matchId)
 
         if (error) throw error
-
         document.getElementById(`home-score-${matchId}`).value = ''
         document.getElementById(`away-score-${matchId}`).value = ''
-        showMatchMessage(matchId, '🔄 Skor sıfırlandı!')
+        showMatchMessage(matchId, '🔄 Sıfırlandı!')
+        setTimeout(loadPreview, 1000)
       } catch (error) {
-        console.error('Sıfırlama hatası:', error)
         alert('Hata: ' + error.message)
       }
     }
@@ -561,16 +620,11 @@
       if (!confirm('Bu maçı silmek istediğinizden emin misiniz?')) return
 
       try {
-        const { error } = await adminSupabase
-          .from('matches')
-          .delete()
-          .eq('id', matchId)
-
+        const { error } = await adminSupabase.from('matches').delete().eq('id', matchId)
         if (error) throw error
-
         await loadMatches()
+        setTimeout(loadPreview, 1000)
       } catch (error) {
-        console.error('Silme hatası:', error)
         alert('Hata: ' + error.message)
       }
     }
@@ -579,12 +633,147 @@
       const msg = document.getElementById(`msg-${matchId}`)
       msg.textContent = text
       msg.style.display = 'block'
-      setTimeout(() => {
-        msg.style.display = 'none'
-      }, 3000)
+      setTimeout(() => msg.style.display = 'none', 3000)
     }
 
-    // Sayfa yüklendiğinde kontrol
+    // PREVIEW FUNCTIONS
+    async function loadPreview() {
+      await Promise.all([loadPreviewDraw(), loadPreviewFixtures(), loadPreviewStandings()])
+    }
+
+    async function loadPreviewDraw() {
+      const { data } = await adminSupabase.from('draw').select('*').order('player_name')
+      
+      if (!data || data.length === 0) {
+        document.getElementById('preview-draw').innerHTML = '<div style="text-align:center;color:#999;">Henüz kura yapılmadı</div>'
+        return
+      }
+      
+      const html = data.map(item => `
+        <div class="preview-draw-card">
+          <div style="font-weight:600;margin-bottom:5px;">${item.player_name}</div>
+          <div style="color:#667eea;">${item.team_name}</div>
+        </div>
+      `).join('')
+      
+      document.getElementById('preview-draw').innerHTML = html
+    }
+
+    async function loadPreviewFixtures() {
+      const { data } = await adminSupabase.from('matches').select('*').order('week_number, id').limit(10)
+      
+      if (!data || data.length === 0) {
+        document.getElementById('preview-fixtures').innerHTML = '<div style="text-align:center;color:#999;">Henüz maç yok</div>'
+        return
+      }
+      
+      const html = data.map(match => {
+        const hasScore = match.home_score !== null && match.away_score !== null
+        const scoreText = hasScore ? `${match.home_score} - ${match.away_score}` : '-'
+        
+        return `
+          <div class="preview-match">
+            <div>
+              <strong>${match.home_team}</strong> vs <strong>${match.away_team}</strong>
+              <span style="color:#999;margin-left:10px;">(Hafta ${match.week_number || 1})</span>
+            </div>
+            <div style="font-weight:bold;color:${hasScore ? '#667eea' : '#ccc'};">${scoreText}</div>
+          </div>
+        `
+      }).join('')
+      
+      document.getElementById('preview-fixtures').innerHTML = html
+    }
+
+    async function loadPreviewStandings() {
+      const { data: matches } = await adminSupabase.from('matches').select('*')
+      const { data: draw } = await adminSupabase.from('draw').select('*')
+      
+      if (!draw || draw.length === 0) {
+        document.getElementById('preview-standings').innerHTML = '<div style="text-align:center;color:#999;">Henüz kura yapılmadı</div>'
+        return
+      }
+      
+      // Calculate standings (simplified version)
+      const teams = {}
+      draw.forEach(item => {
+        teams[item.team_name] = {
+          team: item.team_name,
+          player: item.player_name,
+          played: 0,
+          points: 0,
+          gf: 0,
+          ga: 0,
+          gd: 0
+        }
+      })
+
+      if (matches) {
+        matches.forEach(match => {
+          if (match.home_score === null || match.away_score === null) return
+          
+          const home = teams[match.home_team]
+          const away = teams[match.away_team]
+          
+          if (!home || !away) return
+          
+          home.played++
+          away.played++
+          home.gf += match.home_score
+          home.ga += match.away_score
+          away.gf += match.away_score
+          away.ga += match.home_score
+          
+          if (match.home_score > match.away_score) {
+            home.points += 3
+          } else if (match.home_score < match.away_score) {
+            away.points += 3
+          } else {
+            home.points++
+            away.points++
+          }
+        })
+      }
+
+      Object.values(teams).forEach(team => {
+        team.gd = team.gf - team.ga
+      })
+
+      const standings = Object.values(teams).sort((a, b) => {
+        if (a.points !== b.points) return b.points - a.points
+        if (a.gd !== b.gd) return b.gd - a.gd
+        return b.gf - a.gf
+      })
+
+      const html = `
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#667eea;color:white;">
+              <th style="padding:10px;">#</th>
+              <th style="padding:10px;">Takım</th>
+              <th style="padding:10px;">O</th>
+              <th style="padding:10px;">P</th>
+              <th style="padding:10px;">Av</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${standings.map((team, i) => `
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:10px;font-weight:bold;">${i + 1}</td>
+                <td style="padding:10px;"><strong>${team.team}</strong><br><small style="color:#999;">${team.player}</small></td>
+                <td style="padding:10px;">${team.played}</td>
+                <td style="padding:10px;font-weight:bold;color:#667eea;">${team.points}</td>
+                <td style="padding:10px;">${team.gd > 0 ? '+' : ''}${team.gd}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `
+      
+      document.getElementById('preview-standings').innerHTML = html
+    }
+
+    // Auto-load on login
     if (localStorage.getItem('admin-logged-in') === 'true') {
       adminSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
       showAdminPanel()

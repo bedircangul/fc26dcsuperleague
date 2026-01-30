@@ -6,22 +6,20 @@
   <title>EA FC 26 Turnuvası</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
-      padding-bottom: 80px;
+      padding: 20px;
     }
+    
     .container {
       max-width: 1000px;
       margin: 0 auto;
-      padding: 20px;
     }
+    
     h1 {
       color: white;
       text-align: center;
@@ -29,54 +27,74 @@
       font-size: 32px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
+    
     .tabs {
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
-      background: white;
+      background: rgba(255,255,255,0.95);
       padding: 10px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
+    
     .tab-btn {
       flex: 1;
       padding: 15px;
-      background: #f0f0f0;
-      border: none;
+      background: #e9ecef;
+      border: 2px solid transparent;
       border-radius: 8px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      color: #666;
+      color: #495057;
     }
+    
+    .tab-btn:hover {
+      background: #dee2e6;
+    }
+    
     .tab-btn.active {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+      border-color: #667eea;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
+    
     .tab-content {
       display: none;
       background: white;
       border-radius: 12px;
       padding: 25px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: fadeIn 0.3s;
+      min-height: 400px;
     }
+    
     .tab-content.active {
       display: block;
+      animation: fadeIn 0.3s;
     }
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #667eea;
+    }
+    
     .draw-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 15px;
-      margin-top: 20px;
     }
+    
     .draw-card {
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       padding: 20px;
@@ -84,21 +102,39 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.1);
       transition: transform 0.2s;
     }
+    
     .draw-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
     }
+    
     .player-name {
       font-weight: bold;
       color: #333;
       margin-bottom: 8px;
-      font-size: 16px;
+      font-size: 18px;
     }
+    
     .team-name {
       color: #667eea;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
     }
+    
+    .week-section {
+      margin-bottom: 30px;
+    }
+    
+    .week-title {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
     .match-item {
       background: #f8f9fa;
       padding: 18px;
@@ -110,23 +146,20 @@
       border-left: 4px solid #667eea;
       transition: all 0.2s;
     }
+    
     .match-item:hover {
       background: #e9ecef;
-      transform: translateX(3px);
+      transform: translateX(5px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .match-info {
-      flex: 1;
-    }
+    
     .match-teams {
       font-size: 16px;
       color: #333;
       font-weight: 600;
+      flex: 1;
     }
-    .match-week {
-      font-size: 12px;
-      color: #888;
-      margin-top: 4px;
-    }
+    
     .match-score {
       font-size: 24px;
       font-weight: bold;
@@ -134,74 +167,65 @@
       min-width: 80px;
       text-align: center;
     }
+    
     .match-score.pending {
-      color: #ccc;
+      color: #adb5bd;
       font-size: 18px;
     }
+    
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
     }
+    
     th, td {
       padding: 14px 10px;
       text-align: left;
       border-bottom: 1px solid #e9ecef;
     }
+    
     th {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       position: sticky;
       top: 0;
     }
+    
     td {
       font-size: 14px;
     }
-    tr:hover {
+    
+    tbody tr:hover {
       background: #f8f9fa;
     }
+    
     .rank {
       font-weight: bold;
-      color: #667eea;
-      font-size: 16px;
+      font-size: 18px;
     }
+    
     .rank-1 { color: #FFD700; }
     .rank-2 { color: #C0C0C0; }
     .rank-3 { color: #CD7F32; }
-    .loading {
+    
+    .loading, .error, .empty {
       text-align: center;
-      padding: 50px;
-      color: #666;
+      padding: 50px 20px;
       font-size: 18px;
     }
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-      padding: 15px;
-      border-radius: 8px;
-      margin: 20px 0;
-    }
+    
+    .loading { color: #6c757d; }
+    .error { color: #dc3545; background: #f8d7da; border-radius: 8px; }
+    .empty { color: #6c757d; }
+    
     @media (max-width: 768px) {
-      .container {
-        padding: 10px;
-      }
-      h1 {
-        font-size: 24px;
-      }
-      .tabs {
-        flex-direction: column;
-      }
-      .draw-grid {
-        grid-template-columns: 1fr;
-      }
-      table {
-        font-size: 12px;
-      }
-      th, td {
-        padding: 8px 5px;
-      }
+      h1 { font-size: 24px; }
+      .tabs { flex-direction: column; }
+      .draw-grid { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 5px; }
     }
   </style>
 </head>
@@ -210,30 +234,24 @@
     <h1>⚽ EA FC 26 Turnuvası</h1>
     
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('draw')">🎲 Kura</button>
-      <button class="tab-btn" onclick="switchTab('fixtures')">📋 Fikstür</button>
-      <button class="tab-btn" onclick="switchTab('standings')">🏆 Puan Durumu</button>
+      <button class="tab-btn active" data-tab="draw">🎲 Kura</button>
+      <button class="tab-btn" data-tab="fixtures">📋 Fikstür</button>
+      <button class="tab-btn" data-tab="standings">🏆 Puan Durumu</button>
     </div>
 
-    <div id="draw-tab" class="tab-content active">
-      <h2 style="color: #333; margin-bottom: 15px;">🎲 Takım Eşleşmeleri</h2>
-      <div id="draw-list">
-        <div class="loading">Yükleniyor...</div>
-      </div>
+    <div id="draw-content" class="tab-content active">
+      <h2>🎲 Takım Eşleşmeleri</h2>
+      <div id="draw-list" class="loading">Yükleniyor...</div>
     </div>
 
-    <div id="fixtures-tab" class="tab-content">
-      <h2 style="color: #333; margin-bottom: 15px;">📋 Maç Fikstürü</h2>
-      <div id="fixtures-list">
-        <div class="loading">Yükleniyor...</div>
-      </div>
+    <div id="fixtures-content" class="tab-content">
+      <h2>📋 Maç Fikstürü</h2>
+      <div id="fixtures-list" class="loading">Yükleniyor...</div>
     </div>
 
-    <div id="standings-tab" class="tab-content">
-      <h2 style="color: #333; margin-bottom: 15px;">🏆 Puan Durumu</h2>
-      <div id="standings-table">
-        <div class="loading">Yükleniyor...</div>
-      </div>
+    <div id="standings-content" class="tab-content">
+      <h2>🏆 Puan Durumu</h2>
+      <div id="standings-list" class="loading">Yükleniyor...</div>
     </div>
   </div>
 
@@ -243,27 +261,40 @@
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-    function switchTab(tab) {
-      // Remove active from all
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'))
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'))
-      
-      // Add active to selected
-      document.getElementById(tab + '-tab').classList.add('active')
-      event.target.classList.add('active')
-    }
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetTab = this.getAttribute('data-tab')
+        
+        // Remove active class from all
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'))
+        
+        // Add active class to clicked
+        this.classList.add('active')
+        document.getElementById(targetTab + '-content').classList.add('active')
+        
+        console.log('Switched to tab:', targetTab)
+      })
+    })
 
     async function loadDraw() {
+      console.log('Loading draw...')
       try {
-        const { data, error } = await supabase
-          .from('draw')
-          .select('*')
-          .order('player_name')
+        const { data, error } = await supabase.from('draw').select('*').order('player_name')
         
-        if (error) throw error
+        if (error) {
+          console.error('Draw error:', error)
+          document.getElementById('draw-list').innerHTML = 
+            '<div class="error">❌ Veri yüklenemedi: ' + error.message + '</div>'
+          return
+        }
+        
+        console.log('Draw data:', data)
         
         if (!data || data.length === 0) {
-          document.getElementById('draw-list').innerHTML = '<div class="error">Kura henüz yapılmadı!</div>'
+          document.getElementById('draw-list').innerHTML = 
+            '<div class="empty">Henüz kura yapılmadı. Admin panelden kura oluşturun.</div>'
           return
         }
         
@@ -280,22 +311,29 @@
         
         document.getElementById('draw-list').innerHTML = html
       } catch (error) {
-        console.error('Kura yükleme hatası:', error)
-        document.getElementById('draw-list').innerHTML = `<div class="error">Hata: ${error.message}</div>`
+        console.error('Draw exception:', error)
+        document.getElementById('draw-list').innerHTML = 
+          '<div class="error">❌ Hata: ' + error.message + '</div>'
       }
     }
 
     async function loadFixtures() {
+      console.log('Loading fixtures...')
       try {
-        const { data, error } = await supabase
-          .from('matches')
-          .select('*')
-          .order('week_number, id')
+        const { data, error } = await supabase.from('matches').select('*').order('week_number, id')
         
-        if (error) throw error
+        if (error) {
+          console.error('Fixtures error:', error)
+          document.getElementById('fixtures-list').innerHTML = 
+            '<div class="error">❌ Veri yüklenemedi: ' + error.message + '</div>'
+          return
+        }
+        
+        console.log('Fixtures data:', data)
         
         if (!data || data.length === 0) {
-          document.getElementById('fixtures-list').innerHTML = '<div class="error">Henüz maç eklenmedi!</div>'
+          document.getElementById('fixtures-list').innerHTML = 
+            '<div class="empty">Henüz maç eklenmedi. Admin panelden maç ekleyin.</div>'
           return
         }
         
@@ -308,45 +346,64 @@
         })
         
         let html = ''
-        Object.keys(weeks).sort((a, b) => a - b).forEach(week => {
-          html += `<h3 style="color: #667eea; margin: 20px 0 10px 0; padding-left: 5px; border-left: 4px solid #667eea;">${week}. Hafta</h3>`
+        Object.keys(weeks).sort((a, b) => parseInt(a) - parseInt(b)).forEach(week => {
+          html += `
+            <div class="week-section">
+              <div class="week-title">📅 ${week}. Hafta</div>
+          `
           
           weeks[week].forEach(match => {
             const hasScore = match.home_score !== null && match.away_score !== null
-            const scoreText = hasScore ? `${match.home_score} - ${match.away_score}` : 'vs'
-            const scoreClass = hasScore ? '' : 'pending'
+            const scoreDisplay = hasScore 
+              ? `<div class="match-score">${match.home_score} - ${match.away_score}</div>`
+              : `<div class="match-score pending">-</div>`
             
             html += `
               <div class="match-item">
-                <div class="match-info">
-                  <div class="match-teams">${match.home_team} <span style="color:#999;">${scoreText}</span> ${match.away_team}</div>
+                <div class="match-teams">
+                  <strong>${match.home_team}</strong> 
+                  <span style="color:#999; margin: 0 8px;">vs</span> 
+                  <strong>${match.away_team}</strong>
                 </div>
-                ${hasScore ? `<div class="match-score">${match.home_score} - ${match.away_score}</div>` : '<div class="match-score pending">-</div>'}
+                ${scoreDisplay}
               </div>
             `
           })
+          
+          html += '</div>'
         })
         
         document.getElementById('fixtures-list').innerHTML = html
       } catch (error) {
-        console.error('Fikstür yükleme hatası:', error)
-        document.getElementById('fixtures-list').innerHTML = `<div class="error">Hata: ${error.message}</div>`
+        console.error('Fixtures exception:', error)
+        document.getElementById('fixtures-list').innerHTML = 
+          '<div class="error">❌ Hata: ' + error.message + '</div>'
       }
     }
 
     async function loadStandings() {
+      console.log('Loading standings...')
       try {
         const { data: matches, error: matchError } = await supabase.from('matches').select('*')
         const { data: draw, error: drawError } = await supabase.from('draw').select('*')
         
-        if (matchError) throw matchError
-        if (drawError) throw drawError
-        
-        if (!draw || draw.length === 0) {
-          document.getElementById('standings-table').innerHTML = '<div class="error">Kura henüz yapılmadı!</div>'
+        if (matchError || drawError) {
+          const error = matchError || drawError
+          console.error('Standings error:', error)
+          document.getElementById('standings-list').innerHTML = 
+            '<div class="error">❌ Veri yüklenemedi: ' + error.message + '</div>'
           return
         }
         
+        console.log('Standings - matches:', matches, 'draw:', draw)
+        
+        if (!draw || draw.length === 0) {
+          document.getElementById('standings-list').innerHTML = 
+            '<div class="empty">Henüz kura yapılmadı. Admin panelden kura oluşturun.</div>'
+          return
+        }
+        
+        // Initialize teams
         const teams = {}
         draw.forEach(item => {
           teams[item.team_name] = {
@@ -364,7 +421,8 @@
           }
         })
 
-        if (matches) {
+        // Calculate standings
+        if (matches && matches.length > 0) {
           matches.forEach(match => {
             if (match.home_score === null || match.away_score === null) return
             
@@ -395,6 +453,7 @@
               away.points++
             }
             
+            // Head to head
             if (!home.h2h[away.team]) home.h2h[away.team] = { gf: 0, ga: 0 }
             if (!away.h2h[home.team]) away.h2h[home.team] = { gf: 0, ga: 0 }
             home.h2h[away.team].gf += match.home_score
@@ -404,14 +463,17 @@
           })
         }
 
+        // Calculate goal difference
         Object.values(teams).forEach(team => {
           team.gd = team.gf - team.ga
         })
 
+        // Sort teams
         const standings = Object.values(teams).sort((a, b) => {
           if (a.points !== b.points) return b.points - a.points
           
-          if (a.h2h[b.team]) {
+          // Head to head
+          if (a.h2h[b.team] && b.h2h[a.team]) {
             const aH2H = a.h2h[b.team].gf - a.h2h[b.team].ga
             const bH2H = b.h2h[a.team].gf - b.h2h[a.team].ga
             if (aH2H !== bH2H) return bH2H - aH2H
@@ -441,52 +503,70 @@
                 </tr>
               </thead>
               <tbody>
-                ${standings.map((team, index) => `
-                  <tr>
-                    <td class="rank rank-${index + 1}">${index + 1}</td>
-                    <td><strong>${team.team}</strong></td>
-                    <td>${team.player}</td>
-                    <td>${team.played}</td>
-                    <td>${team.won}</td>
-                    <td>${team.drawn}</td>
-                    <td>${team.lost}</td>
-                    <td>${team.gf}</td>
-                    <td>${team.ga}</td>
-                    <td style="color: ${team.gd > 0 ? 'green' : team.gd < 0 ? 'red' : 'black'}; font-weight: 600;">
-                      ${team.gd > 0 ? '+' : ''}${team.gd}
-                    </td>
-                    <td><strong style="color: #667eea; font-size: 16px;">${team.points}</strong></td>
-                  </tr>
-                `).join('')}
+                ${standings.map((team, index) => {
+                  const rankClass = index < 3 ? `rank rank-${index + 1}` : 'rank'
+                  const gdColor = team.gd > 0 ? 'green' : team.gd < 0 ? 'red' : '#333'
+                  
+                  return `
+                    <tr>
+                      <td class="${rankClass}">${index + 1}</td>
+                      <td><strong>${team.team}</strong></td>
+                      <td>${team.player}</td>
+                      <td>${team.played}</td>
+                      <td>${team.won}</td>
+                      <td>${team.drawn}</td>
+                      <td>${team.lost}</td>
+                      <td>${team.gf}</td>
+                      <td>${team.ga}</td>
+                      <td style="color: ${gdColor}; font-weight: 600;">
+                        ${team.gd > 0 ? '+' : ''}${team.gd}
+                      </td>
+                      <td><strong style="color: #667eea; font-size: 16px;">${team.points}</strong></td>
+                    </tr>
+                  `
+                }).join('')}
               </tbody>
             </table>
           </div>
         `
         
-        document.getElementById('standings-table').innerHTML = html
+        document.getElementById('standings-list').innerHTML = html
       } catch (error) {
-        console.error('Puan durumu hatası:', error)
-        document.getElementById('standings-table').innerHTML = `<div class="error">Hata: ${error.message}</div>`
+        console.error('Standings exception:', error)
+        document.getElementById('standings-list').innerHTML = 
+          '<div class="error">❌ Hata: ' + error.message + '</div>'
       }
     }
 
+    // Load all data
     async function loadAll() {
+      console.log('Loading all data...')
       await Promise.all([loadDraw(), loadFixtures(), loadStandings()])
     }
 
-    // İlk yükleme
-    loadAll()
-
-    // Real-time güncellemeler
+    // Real-time updates
     supabase
-      .channel('all-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'matches' }, loadFixtures)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'matches' }, loadStandings)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'draw' }, loadDraw)
+      .channel('public-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'matches' }, () => {
+        console.log('Matches changed, reloading...')
+        loadFixtures()
+        loadStandings()
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'draw' }, () => {
+        console.log('Draw changed, reloading...')
+        loadDraw()
+        loadStandings()
+      })
       .subscribe()
 
-    // Periyodik yenileme
+    // Periodic refresh
     setInterval(loadAll, 30000)
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('Page loaded, starting data load...')
+      loadAll()
+    })
   </script>
 </body>
 </html>
