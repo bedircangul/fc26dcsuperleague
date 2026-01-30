@@ -259,18 +259,16 @@
     const SUPABASE_URL = 'https://lioopzsrruwxudwptqer.supabase.co'
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxpb29wenNycnV3eHVkd3B0cWVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3Njc4MTcsImV4cCI6MjA4NTM0MzgxN30.pCN1IOGu2BcHYVb_B3BM0NEOtMr4mlGQLPokOiW1GPU'
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
     // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const targetTab = this.getAttribute('data-tab')
         
-        // Remove active class from all
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'))
         
-        // Add active class to clicked
         this.classList.add('active')
         document.getElementById(targetTab + '-content').classList.add('active')
         
@@ -281,7 +279,7 @@
     async function loadDraw() {
       console.log('Loading draw...')
       try {
-        const { data, error } = await supabase.from('draw').select('*').order('player_name')
+        const { data, error } = await sb.from('draw').select('*').order('player_name')
         
         if (error) {
           console.error('Draw error:', error)
@@ -320,7 +318,7 @@
     async function loadFixtures() {
       console.log('Loading fixtures...')
       try {
-        const { data, error } = await supabase.from('matches').select('*').order('week_number, id')
+        const { data, error } = await sb.from('matches').select('*').order('week_number, id')
         
         if (error) {
           console.error('Fixtures error:', error)
@@ -337,7 +335,6 @@
           return
         }
         
-        // Group by week
         const weeks = {}
         data.forEach(match => {
           const week = match.week_number || 1
@@ -384,8 +381,8 @@
     async function loadStandings() {
       console.log('Loading standings...')
       try {
-        const { data: matches, error: matchError } = await supabase.from('matches').select('*')
-        const { data: draw, error: drawError } = await supabase.from('draw').select('*')
+        const { data: matches, error: matchError } = await sb.from('matches').select('*')
+        const { data: draw, error: drawError } = await sb.from('draw').select('*')
         
         if (matchError || drawError) {
           const error = matchError || drawError
@@ -403,7 +400,6 @@
           return
         }
         
-        // Initialize teams
         const teams = {}
         draw.forEach(item => {
           teams[item.team_name] = {
@@ -421,7 +417,6 @@
           }
         })
 
-        // Calculate standings
         if (matches && matches.length > 0) {
           matches.forEach(match => {
             if (match.home_score === null || match.away_score === null) return
@@ -453,7 +448,6 @@
               away.points++
             }
             
-            // Head to head
             if (!home.h2h[away.team]) home.h2h[away.team] = { gf: 0, ga: 0 }
             if (!away.h2h[home.team]) away.h2h[home.team] = { gf: 0, ga: 0 }
             home.h2h[away.team].gf += match.home_score
@@ -463,16 +457,13 @@
           })
         }
 
-        // Calculate goal difference
         Object.values(teams).forEach(team => {
           team.gd = team.gf - team.ga
         })
 
-        // Sort teams
         const standings = Object.values(teams).sort((a, b) => {
           if (a.points !== b.points) return b.points - a.points
           
-          // Head to head
           if (a.h2h[b.team] && b.h2h[a.team]) {
             const aH2H = a.h2h[b.team].gf - a.h2h[b.team].ga
             const bH2H = b.h2h[a.team].gf - b.h2h[a.team].ga
@@ -538,14 +529,12 @@
       }
     }
 
-    // Load all data
     async function loadAll() {
       console.log('Loading all data...')
       await Promise.all([loadDraw(), loadFixtures(), loadStandings()])
     }
 
-    // Real-time updates
-    supabase
+    sb
       .channel('public-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'matches' }, () => {
         console.log('Matches changed, reloading...')
@@ -559,10 +548,8 @@
       })
       .subscribe()
 
-    // Periodic refresh
     setInterval(loadAll, 30000)
 
-    // Initial load
     window.addEventListener('DOMContentLoaded', () => {
       console.log('Page loaded, starting data load...')
       loadAll()
